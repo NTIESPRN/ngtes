@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block style %}
+<style>
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f8f9fa;
+    }
+
+    .navbar {
+        background-color: #f8f9fa;
+    }
+
+    .form-container {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .form-container h1 {
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    .form-container form {
+        padding: 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+    }
+
+    .form-container .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-container .form-control {
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .form-container .btn-primary {
+        width: 100%;
+        height: 40px;
+        font-size: 16px;
+    }
+
+
+    .container {
+        margin-top: 30px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+    <div class="container mt-3">
+        <div class="form-container">
+            <h1>Cadastro de Servidores</h1>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-field">
+                    {{ form.as_p }}
+
+                </div>
+
+                <button class="btn waves-effect waves-light" type="submit">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="container mt-3">
+        <h2>Servidores Cadastrados</h2>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th><a href="?sort=setor">Setor</a></th>
+                    <th><a href="?sort=nome">Nome</a></th>
+                    <th><a href="?sort=email">Email</a></th>
+                    <th>Documentos Associados</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for servidor in servidores %}
+                <tr>
+                    <td>{{ servidor.setor }}</td>
+                    <td>{{ servidor.nome }}</td>
+                    <td>{{ servidor.email }}</td>
+                    <td>
+                        {% for documento in servidor.documento_set.all %}
+                        {{ documento.tipo }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'editar_servidor' servidor.id %}" style="margin-left: 10px;">Editar</a>
+                        <a href="{% url 'perfil_servidor' servidor.id %}">Ver Perfil</a>
+                        <a href="{% url 'documentos_enviados' servidor.id %}" style="margin-left: 10px;">Ver Documentos</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">Nenhum servidor cadastrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        
+
+    </div>
+        {% endblock %}
+        {% block script %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var sidenav = document.querySelectorAll('.sidenav');
+            M.Sidenav.init(sidenav);
+            var selects = document.querySelectorAll('select');
+            M.FormSelect.init(selects);
+        });
+  
+        $(document).ready(function () {
+            $('.input-field input[name="{{ form.data_nascimento.name }}"]').mask('00/00/0000');
+            $('.input-field input[name="{{ form.cpf.name }}"]').mask('000.000.000-00');
+            $('.input-field input[name="{{ form.telefone.name }}"]').mask(
+                $('input[name="{{ form.telefone.name }}"]').attr('data-mask')
+            );
+        });
+    </script>
+            {% endblock %}

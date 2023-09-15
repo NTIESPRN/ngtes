@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block style %}
+<style></style>
+{% endblock %}
+{% block content %}
+    <div class="container mt-3">
+        <div class="form-container">
+    <h1>Enviar Documento</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-field">
+            {{ form.as_p }}
+
+        </div>
+
+        {% if form.errors.tipo %}
+            <p style="color: red;">{{ form.errors.tipo }}</p>
+            <p>Deseja substituir o documento existente? (sim/não)</p>
+            <input type="text" name="confirmar_substituicao">
+        {% endif %}
+
+        <input type="hidden" name="servidor" value="{{ servidor.id }}">
+        <button class="btn waves-effect waves-light" type="submit">Salvar</button>
+    </form>
+    {% endblock %}
+    {% block script %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var sidenav = document.querySelectorAll('.sidenav');
+            M.Sidenav.init(sidenav);
+            var selects = document.querySelectorAll('select');
+            M.FormSelect.init(selects);
+        });
+    </script>
+            {% endblock %}

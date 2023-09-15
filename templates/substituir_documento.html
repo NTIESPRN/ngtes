@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Substituir Documento</title>
+</head>
+<body>
+    <h1>Substituir Documento</h1>
+    <h2>Servidor: {{ servidor.nome }}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>Documento existente: {{ documento_existente }}</p>
+        <label for="arquivo">Novo Arquivo:</label>
+        <input type="file" name="arquivo" id="arquivo">
+        <button type="submit">Substituir</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block style %}
+    <style>
+        .table-bordered {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: #f8f9fa;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-container h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-container form {
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+
+        .form-container .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-container .form-control {
+            width: 100%;
+            height: 40px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-container .btn-primary {
+            width: 100%;
+            height: 40px;
+            font-size: 16px;
+        }
+        .navbar {
+            background-color: #26a69a;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+        h2 {
+            font-size: 24px;
+        }
+    </style>
+    {% endblock %}
+    {% block content %}
+
+    <div class="container mt-3">
+        <div class="form-container">
+            <h1>Cadastro de Cursos</h1>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-field">
+                    {{ form.nome.label_tag }}
+                    {{ form.nome }}
+                </div>
+                <div class="input-field">
+                    <select id="{{ form.docente.id_for_label }}" name="{{ form.docente.name }}">
+                        <option value="" disabled selected></option>
+                        {% for docente in docentes %}
+                            <option value="{{ docente.id }}">{{ docente.nome }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="{{ form.docente.id_for_label }}">Docente</label>
+                </div>
+                
+                <div class="input-field">
+                    {{ form.turma.label_tag }}
+                    {{ form.turma }}
+                </div>
+                <div class="input-field">
+                    {{ form.ano.label_tag }}
+                    {{ form.ano }}
+                </div>
+                <div class="input-field">
+                    {{ form.componente.label_tag }}
+                    {{ form.componente }}
+                </div>
+                <div class="input-field">
+                    {{ form.periodo.label_tag }}
+                    {{ form.periodo }}
+                </div>
+                <div class="input-field">
+                    {{ form.carga_horaria.label_tag }}
+                    {{ form.carga_horaria }}
+                </div>
+                <div class="input-field">
+                    {{ form.perfil.label_tag }}
+                    {{ form.perfil }}
+                </div>
+
+                <button class="btn waves-effect waves-light" type="submit">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="container mt-3">
+        <h2>Cursos Cadastrados</h2>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Docente</th>
+                    <th scope="col">Turma</th>
+                    <th scope="col">Ano</th>
+                    <th scope="col">Componente</th>
+                    <th scope="col">Período</th>
+                    <th scope="col">Carga Horária</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for curso in cursos %}
+                <tr>
+                    <td>{{ curso.nome }}</td>
+                    <td>{{ curso.docente }}</td>
+                    <td>{{ curso.turma }}</td>
+                    <td>{{ curso.ano }}</td>
+                    <td>{{ curso.componente }}</td>
+                    <td>{{ curso.periodo }}</td>
+                    <td>{{ curso.carga_horaria }}</td>
+                    <td>
+                        <a href="{% url 'editar_curso' curso.id %}">Editar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7">Nenhum curso cadastrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+
+    {% endblock %}
+    {% block script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          var elems = document.querySelectorAll('select');
+          var instances = M.FormSelect.init(elems);
+        });
+      </script>
+              {% endblock %}

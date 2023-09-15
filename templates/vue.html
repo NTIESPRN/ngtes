@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Exemplo de Template Vue.js</title>
+  <!-- Inclua o Vue.js -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- Inclua o Bootstrap para estilização -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <h1>{{ greeting }}</h1>
+      <div class="form-group">
+        <label for="nameInput">Digite seu nome:</label>
+        <input v-model="name" id="nameInput" type="text" class="form-control">
+      </div>
+      <button class="btn btn-primary" v-on:click="sayHello">Dizer Olá</button>
+    </div>
+  </div>
+
+  <script>
+    // Inicialize o Vue
+    new Vue({
+      el: '#app',
+      data: {
+        greeting: '',
+        name: ''
+      },
+      methods: {
+        sayHello: function() {
+          if (this.name) {
+            this.greeting = 'Olá, ' + this.name + '!';
+          } else {
+            this.greeting = 'Olá, visitante!';
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

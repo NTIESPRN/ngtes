@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfil</title>
+    <!-- Adicione o link para o arquivo CSS do Materialize -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Perfil do Usuário</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-field">
+                <input type="text" id="username" name="username" value="{{ user.username }}" disabled>
+                <label for="username">Nome de usuário</label>
+            </div>
+            <div class="input-field">
+                <input type="email" id="email" name="email" value="{{ user.email }}" {% if user.email %}disabled{% endif %}>
+                <label for="email">Email</label>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Salvar</button>
+        </form>
+    </div>
+
+    <!-- Adicione o link para o arquivo JavaScript do Materialize -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

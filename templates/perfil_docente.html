@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfil do Docente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .navbar {
+            background-color: #2bbbad;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-wrapper container">
+            <a href="{% url 'index' %}" class="brand-logo">Página Inicial</a>
+            <a href="#" data-target="navbarNav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul id="navbarNav" class="right hide-on-med-and-down">
+                <li><a href="{% url 'cadastro_docente' %}">Cadastro de Docente</a></li>
+                <li><a href="{% url 'cadastro_curso' %}">Cadastro de Curso</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-3">
+        <h1 class="mb-4">Perfil do Docente</h1>
+        <div class="card">
+            <h2>{{ docente.nome }}</h2>
+            <p class="mb-2">Email: {{ docente.email }}</p>
+            <hr>
+            <h3>Dados Pessoais</h3>
+            <p>CPF: {{ docente.cpf }}</p>
+            <p>RG: {{ docente.rg }}</p>
+            <p>Data de Nascimento: {{ docente.data_nascimento }}</p>
+            <p>Filiação: {{ docente.filiacao }}</p>
+            <p>Naturalidade: {{ docente.naturalidade }}</p>
+            <hr>
+            <h3>Contato</h3>
+            <p>Endereço: {{ docente.endereco }}</p>
+            <p>Telefone: {{ docente.telefone }}</p>
+            <p>Email: {{ docente.email }}</p>
+            <hr>
+            <h3>Formação e Trabalho</h3>
+            <p>Formação Acadêmica: {{ docente.formacao_academica }}</p>
+            <p>PIS/PASEP: {{ docente.pis_pasep }}</p>
+            <p>Dados Bancários: {{ docente.dados_bancarios }}</p>
+            <hr>
+            <h3>Avaliação e Observações</h3>
+            <p>Avaliação: {{ docente.avaliacao }}</p>
+            <p>Observação: {{ docente.observacao }}</p>
+        </div>
+
+        <h2 class="mb-4">Cursos Associados</h2>
+        <div class="row">
+            {% for curso in docente.cursos.all %}
+            <div class="col s12 m6">
+                <div class="card">
+                    <h4>{{ curso.nome }}</h4>
+                    <p>Componente: {{ curso.componente }}</p>
+                    <p>Carga Horária: {{ curso.carga_horaria }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col">
+                <div class="card">
+                    <p class="grey-text">Nenhum curso associado.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var sidenav = document.querySelectorAll('.sidenav');
+            M.Sidenav.init(sidenav);
+        });
+    </script>
+</body>
+</html>

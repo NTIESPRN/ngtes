@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block style %}
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .navbar {
+            background-color: #2bbbad;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+    <div class="container mt-3">
+        <h1 class="mb-4">Perfil do Servidor</h1>
+        <div class="card">
+            <h2>{{ servidor.nome }}</h2>
+            <p class="mb-2">Email: {{ servidor.email }}</p>
+            <hr>
+            <h3>Dados Pessoais</h3>
+            <p>CPF: {{ servidor.cpf }}</p>
+            <p>RG: {{ servidor.rg }}</p>
+            <p>Data de Nascimento: {{ servidor.data_nascimento }}</p>
+            <p>Filiação: {{ servidor.filiacao }}</p>
+            <p>Naturalidade: {{ servidor.naturalidade }}</p>
+            <hr>
+            <h3>Contato</h3>
+            <p>Endereço: {{ servidor.endereco }}</p>
+            <p>Telefone: {{ servidor.telefone }}</p>
+            <p>Email: {{ servidor.email }}</p>
+            <hr>
+            <h3>Formação e Trabalho</h3>
+            <p>Formação Acadêmica: {{ servidor.formacao_academica }}</p>
+            <p>PIS/PASEP: {{ servidor.pis_pasep }}</p>
+            <p>Dados Bancários: {{ servidor.dados_bancarios }}</p>
+            <hr>
+            <h3>Avaliação e Observações</h3>
+            <p>Avaliação: {{ servidor.avaliacao }}</p>
+            <p>Observação: {{ servidor.observacao }}</p>
+        </div>
+        <h2 class="mb-4">Documentos Associados</h2>
+        <div class="row">
+            {% for documento in documentos.all %}
+            <div class="col s12 m6">
+                <div class="card">
+                    <h4>
+                    <a  href="{{ documento.arquivo.url }}" target="_blank">{{ documento.tipo }}</a>
+                    </h4>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col">
+                <div class="card">
+                    <p class="grey-text">Nenhum documento associado.</p>
+                </div>
+                {% endfor %}
+        </div>
+        <h2 class="mb-4">Cursos Associados</h2>
+        <div class="row">
+            {% for curso in docente.cursos.all %}
+            <div class="col s12 m6">
+                <div class="card">
+                    <h4>{{ curso.nome }}</h4>
+                    <p>Componente: {{ curso.componente }}</p>
+                    <p>Carga Horária: {{ curso.carga_horaria }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col">
+                <div class="card">
+                    <p class="grey-text">Nenhum curso associado.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock %}
