@@ -60,11 +60,14 @@
 </style>
 {% endblock %}
 {% block content %}
-<form method="post" action="{% url 'emitir_declaracao' %}">
+{% if sucesso %}
+<p class="sucesso">A declaração foi emitida com sucesso. <a href="{% url 'gerar_declaracao_pdf' declaracao.id %}" target="_blank">Baixar PDF</a></p>
+{% endif %}
 
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Emitir e Gerar PDF</button>
+<form method="post" action="{% url 'emitir_declaracao' %}">
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit">Emitir e Gerar PDF</button>
 </form>
 
         {% endblock %}
