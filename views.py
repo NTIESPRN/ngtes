@@ -320,7 +320,6 @@ from io import BytesIO
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph
 from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from django.shortcuts import render, redirect
 from django.http import FileResponse
 from .forms import DeclaracaoForm
@@ -344,8 +343,7 @@ def emitir_declaracao(request):
             conteudo = []
 
             # Adicionar o cabeçalho da declaração
-            styles = getSampleStyleSheet()
-            style = styles['Heading1']
+            style = ParagraphStyle(name='HeaderStyle', fontSize=12)
             cabecalho = [
                 [Paragraph("Declaração", style), ""],
                 [f"Nome do Docente: {declaracao.docente.nome}", f"Curso: {declaracao.curso.nome}"]
