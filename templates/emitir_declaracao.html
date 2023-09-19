@@ -61,14 +61,42 @@
 {% endblock %}
 {% block content %}
 {% if sucesso %}
-<p class="sucesso">A declaração foi emitida com sucesso. <a href="{% url 'emitir_declaracao' %}" download>Baixar PDF</a></p>
+<p class="sucesso">A declaração foi emitida com sucesso. <a href="{% url 'emitir_declaracao' declaracao.id %}" target="_blank">Baixar PDF</a></p>
 {% endif %}
 
+<!-- Adicione uma tabela para exibir as declarações emitidas -->
+<h2>Declarações Emitidas</h2>
+<table border="1">
+  <thead>
+    <tr>
+      <th>Nome do Docente</th>
+      <th>Curso</th>
+      <th>Data de Emissão</th>
+      <!-- Adicione outras colunas da sua declaração, se necessário -->
+    </tr>
+  </thead>
+  <tbody>
+    {% for declaracao in declaracoes_emitidas %}
+    <tr>
+      <td>{{ declaracao.docente.nome }}</td>
+      <td>{{ declaracao.curso.nome }}</td>
+      <td>{{ declaracao.data_emissao }}</td>
+      <!-- Adicione outras colunas da sua declaração, se necessário -->
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="3">Nenhuma declaração emitida.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 <form method="post" action="{% url 'emitir_declaracao' %}">
-{% csrf_token %}
-{{ form.as_p }}
-<button type="submit">Emitir e Gerar PDF</button>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Emitir e Gerar PDF</button>
 </form>
+
 
 
         {% endblock %}
