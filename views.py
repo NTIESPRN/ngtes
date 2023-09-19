@@ -380,7 +380,7 @@ def emitir_declaracao(request):
             tabela.setStyle(estilo)
 
             # Adicionar a tabela ao conteúdo do PDF
-            conteudo.append(tabela)
+            conteudo = [tabela]
 
             # Construir o PDF
             doc.build(conteudo)
