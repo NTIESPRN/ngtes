@@ -314,65 +314,61 @@ def substituir_documento(request, documento_id):
 
 
 
-def emitir_declaracao(request):
-    if request.method == 'POST':
-        form = DeclaracaoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('emitir_declaracao')  # Redirecionar para uma página de sucesso após a emissão da declaração
-    else:
-        form = DeclaracaoForm()
-
-    return render(request, 'emitir_declaracao.html', {'form': form})
-
 from django.http import FileResponse
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from .models import Declaracao
+from .forms import DeclaracaoForm  # Certifique-se de importar o formulário correto
 
-def gerar_declaracao_pdf(request, declaracao_id):
-    # Obter a declaração com base no ID fornecido ou retornar um erro 404 se não existir
-    declaracao = get_object_or_404(Declaracao, id=declaracao_id)
+def emitir_declaracao(request):
+    if request.method == 'POST':
+        form = DeclaracaoForm(request.POST)
+        if form.is_valid():
+            declaracao = form.save()
 
-    # Criar um objeto BytesIO para armazenar o PDF em memória
-    from io import BytesIO
-    buffer = BytesIO()
+            # Criar um objeto BytesIO para armazenar o PDF em memória
+            from io import BytesIO
+            buffer = BytesIO()
 
-    # Criar o objeto PDF, usando o objeto BytesIO como "arquivo"
-    doc = SimpleDocTemplate(buffer, pagesize=letter)
+            # Criar o objeto PDF, usando o objeto BytesIO como "arquivo"
+            doc = SimpleDocTemplate(buffer, pagesize=letter)
 
-    # Conteúdo do PDF (substitua com seus próprios dados)
-    conteudo = []
+            # Conteúdo do PDF (substitua com seus próprios dados)
+            conteudo = []
 
-    # Adicionar o cabeçalho da declaração
-    cabecalho = f"Declaração\n\nNome do Docente: {declaracao.docente.nome}\nCurso: {declaracao.curso.nome}"
-    conteudo.append(cabecalho)
+            # Adicionar o cabeçalho da declaração
+            cabecalho = f"Declaração\n\nNome do Docente: {declaracao.docente.nome}\nCurso: {declaracao.curso.nome}"
+            conteudo.append(cabecalho)
 
-    # Adicionar outros detalhes da declaração conforme necessário
-    # ...
+            # Adicionar outros detalhes da declaração conforme necessário
+            # ...
 
-    # Construir a tabela de conteúdo
-    tabela = Table(conteudo, colWidths=[400], rowHeights=[100])
-    estilo = TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
-    ])
-    tabela.setStyle(estilo)
+            # Construir a tabela de conteúdo
+            tabela = Table(conteudo, colWidths=[400], rowHeights=[100])
+            estilo = TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ])
+            tabela.setStyle(estilo)
 
-    # Adicionar a tabela ao conteúdo do PDF
-    conteudo.append(tabela)
+            # Adicionar a tabela ao conteúdo do PDF
+            conteudo.append(tabela)
 
-    # Construir o PDF
-    doc.build(conteudo)
+            # Construir o PDF
+            doc.build(conteudo)
 
-    # Retornar o PDF como resposta HTTP
-    buffer.seek(0)
-    response = FileResponse(buffer, as_attachment=True, filename='declaracao.pdf')
-    return response
+            # Retornar o PDF como resposta HTTP
+            buffer.seek(0)
+            response = FileResponse(buffer, as_attachment=True, filename='declaracao.pdf')
+            return response
+    else:
+        form = DeclaracaoForm()
+
+    return render(request, 'emitir_declaracao.html', {'form': form})
