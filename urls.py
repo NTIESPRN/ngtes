@@ -32,6 +32,8 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name='password_reset_complete'),
     path('accounts/profile/', auth_views.LoginView.as_view(template_name='perfil.html'), name='profile'),
     path('declaracao/', views.emitir_declaracao, name='emitir_declaracao'),
+    path('declaracao/<int:declaracao_id>/pdf/', views.gerar_declaracao_pdf, name='gerar_declaracao_pdf'),
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
