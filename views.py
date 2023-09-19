@@ -325,7 +325,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 
 def emitir_declaracao(request):
     sucesso = False  # Defina a variável sucesso como False por padrão
-
+    declaracao = None
     if request.method == 'POST':
         form = DeclaracaoForm(request.POST)
         if form.is_valid():
@@ -386,6 +386,6 @@ def emitir_declaracao(request):
         form = DeclaracaoForm()
 
     # Recupere todas as declarações emitidas
-    declaracoes_emitidas = Declaracao.objects.all()
+    declaracoes_emitidas = DeclaracaoForm.objects.all()  # Substitua 'Declaracao' pelo nome do seu modelo de declaração
 
-    return render(request, 'emitir_declaracao.html', {'form': form,  'declaracao': declaracao, 'declaracoes_emitidas': declaracoes_emitidas})
+    return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas})
