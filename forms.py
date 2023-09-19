@@ -1,5 +1,5 @@
 from django import forms
-from .models import Docente, Curso
+from .models import Docente, Curso, Declaracao
 
 class DocenteForm(forms.ModelForm):
     form_name = 'DocenteForm'
@@ -59,3 +59,9 @@ class DocumentoForm(forms.ModelForm):
         for field in self.fields:
             if field != 'id':  # Excluir o campo 'id' se você não quiser incluí-lo no formulário
                 self.fields[field].widget.attrs['class'] = 'validate'
+
+
+class DeclaracaoForm(forms.ModelForm):
+    class Meta:
+        model = Declaracao
+        fields = '__all__'

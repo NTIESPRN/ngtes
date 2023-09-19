@@ -262,3 +262,35 @@ class Documento(models.Model):
 
     def __str__(self):
         return f"{self.servidor.nome} - {self.tipo}"
+
+from django.utils import timezone
+
+class Declaracao(models.Model):
+    data_emissao = models.DateField(default=timezone.now)
+    numero_registro = models.CharField(max_length=50, unique=True)
+    docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    # Outros campos da declaração
+
+    def save(self, *args, **kwargs):
+        if not self.numero_registro:
+            self.numero_registro = self.gerar_numero_registro()
+        super().save(*args, **kwargs)
+
+    def gerar_numero_registro(self):
+        # Obter informações relevantes do docente e curso associados
+        docente_info = f"{self.docente.nome}_{self.docente.matricula}"
+        curso_info = f"{self.curso.nome}_{self.curso.ano}"
+        
+        # Formatar a data de emissão para incluir no número de registro
+        data_formatada = self.data_emissao.strftime('%Y%m%d')
+        
+        # Criar um número de registro único concatenando as informações
+        numero_unico = f"DECL_{data_formatada}_{docente_info}_{curso_info}"
+        
+        # Certificar-se de que o número gerado seja único no banco de dados
+        # Você pode adicionar lógica adicional aqui, se necessário
+        while Declaracao.objects.filter(numero_registro=numero_unico).exists():
+            numero_unico += "_1"  # Adicione um sufixo para torná-lo único
+        
+        return numero_unico

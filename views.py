@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Docente, Curso, Servidor, Documento
-from .forms import DocenteForm, CursoForm, ServidorForm
+from .forms import DocenteForm, CursoForm, ServidorForm, DeclaracaoForm
 from django.http import FileResponse
 import openpyxl
 from openpyxl.utils import get_column_letter
@@ -311,3 +311,16 @@ def substituir_documento(request, documento_id):
         form = DocumentoForm(instance=documento_existente, use_required_attribute=False)
 
     return render(request, 'substituir_documento.html', {'servidor': servidor, 'form': form})
+
+
+
+def emitir_declaracao(request):
+    if request.method == 'POST':
+        form = DeclaracaoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('pagina_de_sucesso')  # Redirecionar para uma página de sucesso após a emissão da declaração
+    else:
+        form = DeclaracaoForm()
+
+    return render(request, 'emitir_declaracao.html', {'form': form})

@@ -31,5 +31,7 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name='password_reset_complete'),
     path('accounts/profile/', auth_views.LoginView.as_view(template_name='perfil.html'), name='profile'),
+    path('emitir-declaracao/', views.emitir_declaracao, name='emitir_declaracao'),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
