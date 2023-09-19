@@ -61,7 +61,7 @@
 {% endblock %}
 {% block content %}
 {% if sucesso %}
-<p class="sucesso">A declaração foi emitida com sucesso. <a href="{% url 'emitir_declaracao' %}" target="_blank">Baixar PDF</a></p>
+<p class="sucesso">A declaração foi emitida com sucesso. <a href="{% url 'emitir_declaracao' %}" download>Baixar PDF</a></p>
 {% endif %}
 
 <form method="post" action="{% url 'emitir_declaracao' %}">
@@ -69,6 +69,7 @@
 {{ form.as_p }}
 <button type="submit">Emitir e Gerar PDF</button>
 </form>
+
 
         {% endblock %}
         {% block script %}
