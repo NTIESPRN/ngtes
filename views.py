@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Docente, Curso, Servidor, Documento
+from .models import Docente, Curso, Servidor, Documento, Declaracao
 from .forms import DocenteForm, CursoForm, ServidorForm, DeclaracaoForm
 from django.http import FileResponse
 import openpyxl
