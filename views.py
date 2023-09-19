@@ -319,7 +319,7 @@ def emitir_declaracao(request):
         form = DeclaracaoForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('pagina_de_sucesso')  # Redirecionar para uma página de sucesso após a emissão da declaração
+            return redirect('emitir_declaracao')  # Redirecionar para uma página de sucesso após a emissão da declaração
     else:
         form = DeclaracaoForm()
 
