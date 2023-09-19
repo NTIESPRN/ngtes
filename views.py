@@ -315,25 +315,17 @@ def substituir_documento(request, documento_id):
 
 
 
-from django.http import FileResponse
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
-from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
-from reportlab.platypus import Spacer
-from django.shortcuts import render, get_object_or_404
-from .models import Declaracao
-from .forms import DeclaracaoForm  # Certifique-se de importar o formulário correto
 
+from io import BytesIO
+from reportlab.lib.pagesizes import letter, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from django.shortcuts import render, redirect
 from django.http import FileResponse
-from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-from reportlab.lib.styles import ParagraphStyle
-from reportlab.lib.units import inch
-from io import BytesIO
-from .models import Declaracao
 from .forms import DeclaracaoForm
+from .models import Declaracao
+from django.core.exceptions import ObjectDoesNotExist
 
 def emitir_declaracao(request):
     sucesso = False  # Variável para indicar se a declaração foi emitida com sucesso
@@ -347,13 +339,14 @@ def emitir_declaracao(request):
             buffer = BytesIO()
 
             # Criar o objeto PDF, usando o objeto BytesIO como "arquivo"
-            doc = SimpleDocTemplate(buffer, pagesize=letter)
+            doc = SimpleDocTemplate(buffer, pagesize=landscape(letter))
 
             # Conteúdo do PDF (substitua com seus próprios dados)
             conteudo = []
 
             # Adicionar o cabeçalho da declaração
-            style = ParagraphStyle(name='HeaderStyle', fontSize=12)
+            styles = getSampleStyleSheet()
+            style = styles['Heading1']
             cabecalho = [
                 [Paragraph("Declaração", style), ""],
                 [f"Nome do Docente: {declaracao.docente.nome}", f"Curso: {declaracao.curso.nome}"]
