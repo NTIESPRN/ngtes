@@ -388,4 +388,4 @@ def emitir_declaracao(request):
     # Recupere todas as declarações emitidas
     declaracoes_emitidas = Declaracao.objects.all()
 
-    return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracao': declaracao, 'declaracoes_emitidas': declaracoes_emitidas})
+    return render(request, 'emitir_declaracao.html', {'form': form,  'declaracao': declaracao, 'declaracoes_emitidas': declaracoes_emitidas})
