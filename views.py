@@ -368,24 +368,24 @@ def emitir_declaracao(request):
             # conteudo.extend(detalhes)
 
             # Construir a tabela de conteúdo
-tabela = Table(conteudo, colWidths=[200, 200], rowHeights=[50, 20, 20])  # Adicione uma altura de linha extra
+            tabela = Table(conteudo, colWidths=[200, 200], rowHeights=[50, 20, 20])  # Adicione uma altura de linha extra
 
-estilo = TableStyle([
-    ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-    ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-    ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-    ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-    ('GRID', (0, 0), (-1, -1), 1, colors.black)
-])
-tabela.setStyle(estilo)
+            estilo = TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ])
+            tabela.setStyle(estilo)
 
-# Adicionar a tabela ao conteúdo do PDF
-conteudo = []  # Limpar o conteúdo anterior
-conteudo.append(tabela)  # Adicionar a tabela atualizada
+            # Construir o PDF
+            conteudo = []  # Limpar o conteúdo anterior
+            conteudo.append(tabela)  # Adicionar a tabela atualizada
 
-doc.build(conteudo)
+            doc.build(conteudo)
 
             # Retornar o PDF como resposta HTTP
             buffer.seek(0)
