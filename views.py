@@ -315,7 +315,7 @@ def substituir_documento(request, documento_id):
 
 
 
-
+from reportlab.lib.units import inch
 from io import BytesIO
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph
