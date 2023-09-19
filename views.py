@@ -316,15 +316,16 @@ def substituir_documento(request, documento_id):
 
 
 from reportlab.lib.units import inch
-from io import BytesIO
-from reportlab.lib.pagesizes import letter, landscape
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Spacer, Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib import colors
 from django.shortcuts import render, redirect
 from django.http import FileResponse
-from .forms import DeclaracaoForm
+from io import BytesIO
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from django.shortcuts import get_object_or_404
 from .models import Declaracao
+from .forms import DeclaracaoForm
+from reportlab.lib.styles import getSampleStyleSheet
 
 def emitir_declaracao(request):
     sucesso = False  # Variável para indicar se a declaração foi emitida com sucesso
@@ -338,38 +339,36 @@ def emitir_declaracao(request):
             buffer = BytesIO()
 
             # Criar o objeto PDF, usando o objeto BytesIO como "arquivo"
-            doc = SimpleDocTemplate(buffer, pagesize=landscape(letter))
+            doc = SimpleDocTemplate(buffer, pagesize=letter)
 
             # Conteúdo do PDF (substitua com seus próprios dados)
             conteudo = []
 
-            # Adicionar o cabeçalho da declaração
+            # Estilo para os parágrafos
             styles = getSampleStyleSheet()
             style = styles['Normal']
+
+            # Adicionar o cabeçalho da declaração
             cabecalho = [
-                [Paragraph("Declaração", style), ""],
-                [f"Nome do Docente: {declaracao.docente.nome}", f"Curso: {declaracao.curso.nome}"]
+                Paragraph("<strong>Declaração</strong>", style),
+                ""
             ]
-
-            # Converter as células da tabela para objetos Paragraph
-            cabecalho = [[Paragraph(cell, style) for cell in row] for row in cabecalho]
-
             conteudo.extend(cabecalho)
 
             # Adicionar uma linha de espaço
-            conteudo.append([Spacer(1, 0.2*inch)])
+            conteudo.append(Spacer(1, 0.2*inch))
 
             # Adicionar outros detalhes da declaração como objetos Flowable
             # Exemplo:
             # detalhes = [
-            #     [Paragraph("Detalhes:", style), ""],
+            #     [Paragraph("<strong>Detalhes:</strong>", style), ""],
             #     [Paragraph("Descrição do detalhe 1", style), Paragraph("Descrição do detalhe 2", style)],
             # ]
             #
-            # Converter as células da tabela de detalhes para objetos Paragraph, se necessário
+            # conteudo.extend(detalhes)
 
             # Construir a tabela de conteúdo
-            tabela = Table(conteudo, colWidths=[200, 200])
+            tabela = Table(conteudo, colWidths=[200, 200], rowHeights=[50, 20])
 
             estilo = TableStyle([
                 ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
@@ -383,7 +382,7 @@ def emitir_declaracao(request):
             tabela.setStyle(estilo)
 
             # Adicionar a tabela ao conteúdo do PDF
-            conteudo = [tabela]
+            conteudo.append(tabela)
 
             # Construir o PDF
             doc.build(conteudo)
