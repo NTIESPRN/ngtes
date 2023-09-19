@@ -350,15 +350,15 @@ def emitir_declaracao(request):
 
             # Adicionar o cabeçalho da declaração
             cabecalho = [
-                Paragraph("<strong>Declaração</strong>", style),
-                ""
+                [Paragraph("<strong>Declaração</strong>", style), ""],
+                [f"Nome do Docente: {declaracao.docente.nome}", f"Curso: {declaracao.curso.nome}"]
             ]
             conteudo.extend(cabecalho)
 
             # Adicionar uma linha de espaço
-            conteudo.append(Spacer(1, 0.2*inch))
+            conteudo.append([Spacer(1, 0.2*inch)])
 
-            # Adicionar outros detalhes da declaração como objetos Flowable
+            # Adicionar outros detalhes da declaração conforme necessário
             # Exemplo:
             # detalhes = [
             #     [Paragraph("<strong>Detalhes:</strong>", style), ""],
@@ -381,10 +381,10 @@ def emitir_declaracao(request):
             ])
             tabela.setStyle(estilo)
 
-            # Adicionar a tabela ao conteúdo do PDF
-            conteudo.append(tabela)
-
             # Construir o PDF
+            conteudo = []  # Limpar o conteúdo anterior
+            conteudo.append(tabela)  # Adicionar a tabela atualizada
+
             doc.build(conteudo)
 
             # Retornar o PDF como resposta HTTP
