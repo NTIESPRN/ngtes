@@ -316,20 +316,14 @@ def substituir_documento(request, documento_id):
 
 
 from reportlab.lib.units import inch
-from django.shortcuts import render, redirect
-from django.http import FileResponse
+from django.http import HttpResponse
 from io import BytesIO
 from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-from django.shortcuts import get_object_or_404
-from .models import Declaracao
-from .forms import DeclaracaoForm
 from reportlab.lib.styles import getSampleStyleSheet
 
 def emitir_declaracao(request):
-    sucesso = False  # Variável para indicar se a declaração foi emitida com sucesso
-
     if request.method == 'POST':
         form = DeclaracaoForm(request.POST)
         if form.is_valid():
@@ -358,15 +352,6 @@ def emitir_declaracao(request):
             # Adicionar uma linha de espaço
             conteudo.append([Spacer(1, 0.2*inch)])
 
-            # Adicionar outros detalhes da declaração conforme necessário
-            # Exemplo:
-            # detalhes = [
-            #     [Paragraph("<strong>Detalhes:</strong>", style), ""],
-            #     [Paragraph("Descrição do detalhe 1", style), Paragraph("Descrição do detalhe 2", style)],
-            # ]
-            #
-            # conteudo.extend(detalhes)
-
             # Construir a tabela de conteúdo
             tabela = Table(conteudo, colWidths=[200, 200], rowHeights=[50, 20, 20])  # Adicione uma altura de linha extra
 
@@ -389,9 +374,9 @@ def emitir_declaracao(request):
 
             # Retornar o PDF como resposta HTTP
             buffer.seek(0)
-            response = FileResponse(buffer, as_attachment=True, filename='declaracao.pdf')
-            sucesso = True
-            return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracao': declaracao})
+            response = HttpResponse(buffer, content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename=declaracao.pdf'
+            return response
 
     else:
         form = DeclaracaoForm()
