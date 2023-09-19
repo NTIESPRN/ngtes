@@ -324,6 +324,8 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 
 def emitir_declaracao(request):
+    sucesso = False  # Defina a variável sucesso como False por padrão
+
     if request.method == 'POST':
         form = DeclaracaoForm(request.POST)
         if form.is_valid():
@@ -376,6 +378,8 @@ def emitir_declaracao(request):
             buffer.seek(0)
             response = HttpResponse(buffer, content_type='application/pdf')
             response['Content-Disposition'] = f'attachment; filename=declaracao.pdf'
+            sucesso = True  # Defina sucesso como True após a emissão bem-sucedida
+
             return response
 
     else:
