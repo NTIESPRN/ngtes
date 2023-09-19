@@ -316,21 +316,32 @@ def substituir_documento(request, documento_id):
 
 
 from django.http import FileResponse
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.platypus import Spacer
 from django.shortcuts import render, get_object_or_404
 from .models import Declaracao
 from .forms import DeclaracaoForm  # Certifique-se de importar o formulário correto
 
+from django.shortcuts import render, redirect
+from django.http import FileResponse
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from io import BytesIO
+from .models import Declaracao
+from .forms import DeclaracaoForm
+
 def emitir_declaracao(request):
+    sucesso = False  # Variável para indicar se a declaração foi emitida com sucesso
+
     if request.method == 'POST':
         form = DeclaracaoForm(request.POST)
         if form.is_valid():
             declaracao = form.save()
 
             # Criar um objeto BytesIO para armazenar o PDF em memória
-            from io import BytesIO
             buffer = BytesIO()
 
             # Criar o objeto PDF, usando o objeto BytesIO como "arquivo"
@@ -340,14 +351,28 @@ def emitir_declaracao(request):
             conteudo = []
 
             # Adicionar o cabeçalho da declaração
-            cabecalho = f"Declaração\n\nNome do Docente: {declaracao.docente.nome}\nCurso: {declaracao.curso.nome}"
-            conteudo.append(cabecalho)
+            style = ParagraphStyle(name='HeaderStyle', fontSize=12)
+            cabecalho = [
+                [Paragraph("Declaração", style), ""],
+                [f"Nome do Docente: {declaracao.docente.nome}", f"Curso: {declaracao.curso.nome}"]
+            ]
+            conteudo.extend(cabecalho)
 
-            # Adicionar outros detalhes da declaração conforme necessário
-            # ...
+            # Adicionar uma linha de espaço
+            conteudo.append([Spacer(1, 0.2*inch)])
+
+            # Adicionar outros detalhes da declaração como objetos Flowable
+            # Exemplo:
+            # detalhes = [
+            #     [Paragraph("Detalhes:", style), ""],
+            #     [Paragraph("Descrição do detalhe 1", style), Paragraph("Descrição do detalhe 2", style)],
+            # ]
+            #
+            # conteudo.extend(detalhes)
 
             # Construir a tabela de conteúdo
-            tabela = Table(conteudo, colWidths=[400], rowHeights=[100])
+            tabela = Table(conteudo, colWidths=[200, 200], rowHeights=[50, 20])
+
             estilo = TableStyle([
                 ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
@@ -368,7 +393,9 @@ def emitir_declaracao(request):
             # Retornar o PDF como resposta HTTP
             buffer.seek(0)
             response = FileResponse(buffer, as_attachment=True, filename='declaracao.pdf')
-            return response
+            sucesso = True
+            return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracao': declaracao})
+
     else:
         form = DeclaracaoForm()
 
