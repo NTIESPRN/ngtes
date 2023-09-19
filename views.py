@@ -351,6 +351,10 @@ def emitir_declaracao(request):
                 [Paragraph("Declaração", style), ""],
                 [f"Nome do Docente: {declaracao.docente.nome}", f"Curso: {declaracao.curso.nome}"]
             ]
+
+            # Converter as células da tabela para objetos Paragraph
+            cabecalho = [[Paragraph(cell, style) for cell in row] for row in cabecalho]
+
             conteudo.extend(cabecalho)
 
             # Adicionar uma linha de espaço
@@ -363,10 +367,10 @@ def emitir_declaracao(request):
             #     [Paragraph("Descrição do detalhe 1", style), Paragraph("Descrição do detalhe 2", style)],
             # ]
             #
-            # conteudo.extend(detalhes)
+            # Converter as células da tabela de detalhes para objetos Paragraph, se necessário
 
             # Construir a tabela de conteúdo
-            tabela = Table(conteudo, colWidths=[200, 200], rowHeights=[50, 20])
+            tabela = Table(conteudo, colWidths=[200, 200])
 
             estilo = TableStyle([
                 ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
