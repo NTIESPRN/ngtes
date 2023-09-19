@@ -60,12 +60,12 @@
 </style>
 {% endblock %}
 {% block content %}
-<form method="post">
+<form method="post" action="{% url 'emitir_declaracao' %}">
+
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Emitir Declaração">
+    <button type="submit">Emitir e Gerar PDF</button>
 </form>
-<a href="{% url 'gerar_declaracao_pdf' declaracao.id %}" target="_blank" class="btn btn-primary">Baixar PDF</a>
 
         {% endblock %}
         {% block script %}
