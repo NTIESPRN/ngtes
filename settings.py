@@ -24,7 +24,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SECRET_KEY = 'wk9=1k^h6(r@u()b26l%4t(!wbgz$4(&c4yo99ei!2j2yk76eq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = true
+DEBUG = True
 
 ALLOWED_HOSTS = ['esprn.saude.rn.gov.br']
 
