@@ -325,7 +325,6 @@ from django.shortcuts import render, redirect
 from django.http import FileResponse
 from .forms import DeclaracaoForm
 from .models import Declaracao
-from django.core.exceptions import ObjectDoesNotExist
 
 def emitir_declaracao(request):
     sucesso = False  # Variável para indicar se a declaração foi emitida com sucesso
