@@ -329,6 +329,7 @@ from django.http import FileResponse
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import ParagraphStyle
 from io import BytesIO
 from .models import Declaracao
 from .forms import DeclaracaoForm
