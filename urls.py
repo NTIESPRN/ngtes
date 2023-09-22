@@ -34,8 +34,6 @@ urlpatterns = [
     path('accounts/profile/', auth_views.LoginView.as_view(template_name='perfil.html'), name='profile'),
     path('declaracao/', views.emitir_declaracao, name='emitir_declaracao'),
     path('emitir_declaracao/<int:declaracao_id>/', views.emitir_declaracao, name='gerar_declaracao_pdf'),
-    path('documentos/', TemplateView.as_view(template_name='erro_404.html'), name='documentos_404'),
-
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
