@@ -126,7 +126,7 @@ def export_to_excel(request):
         sheet.column_dimensions[col_letter].width = 15
 
     # Determine o caminho completo onde deseja salvar o arquivo
-    caminho_completo = '/ngtes/documentos/cursos.xlsx'
+    caminho_completo = '/var/www/ngtes/ngtes/documentos/cursos.xlsx'
 
     # Salve o arquivo no caminho completo especificado
     workbook.save(caminho_completo)
