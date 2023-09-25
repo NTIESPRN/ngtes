@@ -92,9 +92,9 @@ def busca(request):
 
     return render(request, 'busca.html', {'cursos': cursos, 'docentes': docentes})
 
-from django.http import FileResponse
 
-def export_to_excel(cursos):
+
+def export_to_excel(request):
     cursos = Curso.objects.all()
 
     workbook = openpyxl.Workbook()
@@ -125,10 +125,18 @@ def export_to_excel(cursos):
         col_letter = get_column_letter(col_num)
         sheet.column_dimensions[col_letter].width = 15
 
-    filename = 'cursos.xlsx'
-    workbook.save(filename)
-    response = FileResponse(open(filename, 'rb'), as_attachment=True, filename='cursos.xlsx')
+    # Determine o caminho completo onde deseja salvar o arquivo
+    caminho_completo = '/ngtes/documentos/cursos.xlsx'
+
+    # Salve o arquivo no caminho completo especificado
+    workbook.save(caminho_completo)
+
+    # Abra o arquivo e crie uma resposta para download
+    with open(caminho_completo, 'rb') as file:
+        response = FileResponse(file, as_attachment=True, filename='cursos.xlsx')
+
     return response
+
 
 
 
