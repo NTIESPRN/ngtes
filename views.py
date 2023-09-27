@@ -8,8 +8,6 @@ from openpyxl.styles import Alignment
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, get_object_or_404, redirect
-
-
 import re
 
 def format_data_nascimento(data):
@@ -330,6 +328,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.utils import ImageReader
 
 def emitir_declaracao(request):
     sucesso = False  # Defina a variável sucesso como False por padrão
@@ -348,38 +347,37 @@ def emitir_declaracao(request):
             # Conteúdo do PDF (substitua com seus próprios dados)
             conteudo = []
 
+            # Adicionar a logo no início do documento
+            logo_path = 'https://esprn.saude.rn.gov.br/extensao/imagens/logo.png'
+            logo = Image(logo_path, width=2*inch, height=1*inch)
+            conteudo.append(logo)
+
             # Estilo para os parágrafos
             styles = getSampleStyleSheet()
             style = styles['Normal']
 
             # Adicionar o cabeçalho da declaração
             cabecalho = [
-                [Paragraph("<strong>Declaração</strong>", style), ""],
-                [f"Nome do Docente: {declaracao.docente.nome}", f"Curso: {declaracao.curso.nome}"]
+                [Paragraph("<strong>SECRETARIA DE ESTADO DA SAÚDE PÚBLICA</strong>", styles['Center']), ""],
+                [Paragraph("<strong>Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240</strong>", styles['Center']), ""],
+                [Paragraph("<strong>Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br</strong>", styles['Center']), ""],
+                [Spacer(1, 0.2 * inch)],  # Linha de espaço
+                [Paragraph("<strong>DECLARAÇÃO</strong>", styles['Center'])],  # Centralize e aplique negrito
             ]
             conteudo.extend(cabecalho)
 
             # Adicionar uma linha de espaço
             conteudo.append([Spacer(1, 0.2*inch)])
 
-            # Construir a tabela de conteúdo
-            tabela = Table(conteudo, colWidths=[200, 200], rowHeights=[50, 20, 20])  # Adicione uma altura de linha extra
+            corpo_declaracao = [
+                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutora do curso", styles['Normal']),
+                Paragraph(f"<strong>{declaracao.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", styles['Normal']),
+                Paragraph(f"<strong>{declaracao.carga_horaria}</strong>.", styles['Normal']),
+            ]
 
-            estilo = TableStyle([
-                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-                ('GRID', (0, 0), (-1, -1), 1, colors.black)
-            ])
-            tabela.setStyle(estilo)
+            conteudo.extend(corpo_declaracao)
 
             # Construir o PDF
-            conteudo = []  # Limpar o conteúdo anterior
-            conteudo.append(tabela)  # Adicionar a tabela atualizada
-
             doc.build(conteudo)
 
             # Retornar o PDF como resposta HTTP
