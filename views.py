@@ -320,14 +320,13 @@ def substituir_documento(request, documento_id):
     return render(request, 'substituir_documento.html', {'servidor': servidor, 'form': form})
 
 
-
 from reportlab.lib.units import inch
 from django.http import HttpResponse
 from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.platypus import Image
-
+from reportlab.lib.styles import getSampleStyleSheet
 
 def emitir_declaracao(request):
     sucesso = False  # Defina a variável sucesso como False por padrão
@@ -345,6 +344,9 @@ def emitir_declaracao(request):
 
             # Conteúdo do PDF (substitua com seus próprios dados)
             conteudo = []
+
+            # Estilo para os parágrafos
+            styles = getSampleStyleSheet()
 
             # Adicionar a logo no início do documento
             logo_path = 'https://esprn.saude.rn.gov.br/extensao/imagens/logo.png'
