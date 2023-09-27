@@ -326,10 +326,8 @@ from django.http import HttpResponse
 from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Image
 
-# ... Código anterior ...
 
 def emitir_declaracao(request):
     sucesso = False  # Defina a variável sucesso como False por padrão
@@ -348,9 +346,6 @@ def emitir_declaracao(request):
             # Conteúdo do PDF (substitua com seus próprios dados)
             conteudo = []
 
-            # Estilo para os parágrafos
-            styles = getSampleStyleSheet()
-
             # Adicionar a logo no início do documento
             logo_path = 'https://esprn.saude.rn.gov.br/extensao/imagens/logo.png'
             logo = Image(logo_path, width=2*inch, height=1*inch)
@@ -358,11 +353,11 @@ def emitir_declaracao(request):
 
             # Adicionar o cabeçalho da declaração
             cabecalho = [
-                [Paragraph("<strong>SECRETARIA DE ESTADO DA SAÚDE PÚBLICA</strong>", styles['Normal']), ""],
-                [Paragraph("<strong>Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240</strong>", styles['Normal']), ""],
-                [Paragraph("<strong>Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br</strong>", styles['Normal']), ""],
+                [Paragraph("SECRETARIA DE ESTADO DA SAÚDE PÚBLICA", styles['Normal']), ""],
+                [Paragraph("Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240", styles['Normal']), ""],
+                [Paragraph("Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br", styles['Normal']), ""],
                 [Spacer(1, 0.2 * inch)],  # Linha de espaço
-                [Paragraph("<strong>DECLARAÇÃO</strong>", styles['Normal'])],  # Centralize e aplique negrito
+                [Paragraph("DECLARAÇÃO", styles['Normal'])],  # Centralize e aplique negrito
             ]
             conteudo.extend(cabecalho)
 
@@ -370,9 +365,9 @@ def emitir_declaracao(request):
             conteudo.append([Spacer(1, 0.2*inch)])
 
             corpo_declaracao = [
-                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutora do curso", styles['Normal']),
-                Paragraph(f"<strong>{declaracao.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", styles['Normal']),
-                Paragraph(f"<strong>{declaracao.curso.carga_horaria}</strong>.", styles['Normal']),
+                Paragraph(f"Declaramos para os devidos fins que {declaracao.docente.nome}, inscrita sob o CPF nº {declaracao.docente.cpf}, exerceu atividades como tutora do curso", styles['Normal']),
+                Paragraph(f"{declaracao.curso.nome}, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", styles['Normal']),
+                Paragraph(f"{declaracao.curso.carga_horaria}.", styles['Normal']),
             ]
 
             conteudo.extend(corpo_declaracao)
@@ -383,7 +378,7 @@ def emitir_declaracao(request):
             # Retornar o PDF como resposta HTTP
             buffer.seek(0)
             response = HttpResponse(buffer, content_type='application/pdf')
-            response['Content-Disposition'] = f'attachment; filename=declaracao.pdf'
+            response['Content-Disposition'] = 'attachment; filename=declaracao.pdf'
             sucesso = True  # Defina sucesso como True após a emissão bem-sucedida
 
             return response
