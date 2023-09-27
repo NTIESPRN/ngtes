@@ -325,11 +325,9 @@ from reportlab.lib.units import inch
 from django.http import HttpResponse
 from io import BytesIO
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.utils import ImageReader
-
+from reportlab.platypus import Image
 def emitir_declaracao(request):
     sucesso = False  # Defina a variável sucesso como False por padrão
     declaracao = None
