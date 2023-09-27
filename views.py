@@ -328,6 +328,9 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Image
+
+# ... Código anterior ...
+
 def emitir_declaracao(request):
     sucesso = False  # Defina a variável sucesso como False por padrão
     declaracao = None
@@ -345,22 +348,21 @@ def emitir_declaracao(request):
             # Conteúdo do PDF (substitua com seus próprios dados)
             conteudo = []
 
+            # Estilo para os parágrafos
+            styles = getSampleStyleSheet()
+
             # Adicionar a logo no início do documento
             logo_path = 'https://esprn.saude.rn.gov.br/extensao/imagens/logo.png'
             logo = Image(logo_path, width=2*inch, height=1*inch)
             conteudo.append(logo)
 
-            # Estilo para os parágrafos
-            styles = getSampleStyleSheet()
-            style = styles['Normal']
-
             # Adicionar o cabeçalho da declaração
             cabecalho = [
-                [Paragraph("<strong>SECRETARIA DE ESTADO DA SAÚDE PÚBLICA</strong>", styles['Center']), ""],
-                [Paragraph("<strong>Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240</strong>", styles['Center']), ""],
-                [Paragraph("<strong>Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br</strong>", styles['Center']), ""],
+                [Paragraph("<strong>SECRETARIA DE ESTADO DA SAÚDE PÚBLICA</strong>", styles['Normal']), ""],
+                [Paragraph("<strong>Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240</strong>", styles['Normal']), ""],
+                [Paragraph("<strong>Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br</strong>", styles['Normal']), ""],
                 [Spacer(1, 0.2 * inch)],  # Linha de espaço
-                [Paragraph("<strong>DECLARAÇÃO</strong>", styles['Center'])],  # Centralize e aplique negrito
+                [Paragraph("<strong>DECLARAÇÃO</strong>", styles['Normal'])],  # Centralize e aplique negrito
             ]
             conteudo.extend(cabecalho)
 
