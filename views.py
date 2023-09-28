@@ -353,7 +353,7 @@ def emitir_declaracao(request):
             styles = getSampleStyleSheet()
 
             logo_path = 'https://esprn.saude.rn.gov.br/extensao/imagens/logo.png'
-            logo = Image(logo_path, width=2*inch, height=1*inch)
+            logo = Image(logo_path, width=2*inch, height=2*inch)
             conteudo.append(logo)
 
             cabecalho = [
@@ -368,7 +368,7 @@ def emitir_declaracao(request):
             conteudo.append(Spacer(1, 0.2*inch))
 
             corpo_declaracao = [
-                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutora do curso", styles['Normal']),
+                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutor(a) do curso", styles['Normal']),
                 Paragraph(f"<strong>{declaracao.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", styles['Normal']),
                 Paragraph(f"<strong>{declaracao.curso.carga_horaria}</strong>.", styles['Normal']),
             ]
