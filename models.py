@@ -294,3 +294,12 @@ class Declaracao(models.Model):
             numero_unico += "_1"  # Adicione um sufixo para torná-lo único
         
         return numero_unico
+    
+
+class DeclaracaoEmitida(models.Model):
+    declaracao = models.ForeignKey(Declaracao, on_delete=models.CASCADE)  # Referência à declaração emitida
+    codigo_autenticacao = models.CharField(max_length=10, unique=True)  # Código de autenticação único
+    data_emissao = models.DateTimeField(auto_now_add=True)  # Data e hora de emissão
+
+    def __str__(self):
+        return f"Código de Autenticação: {self.codigo_autenticacao}"

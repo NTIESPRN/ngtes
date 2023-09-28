@@ -390,6 +390,9 @@ def emitir_declaracao(request):
 
             doc.build(conteudo)
 
+            declaracao_emitida = DeclaracaoEmitida(declaracao=declaracao, codigo_autenticacao=gerar_codigo_unico())
+            declaracao_emitida.save()
+
             buffer.seek(0)
             response = HttpResponse(buffer, content_type='application/pdf')
             response['Content-Disposition'] = 'attachment; filename=declaracao.pdf'
@@ -404,44 +407,18 @@ def emitir_declaracao(request):
 
     return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas})
 
-import qrcode
-from PIL import Image
+from .models import DeclaracaoEmitida
 
-# URL da página de verificação de autenticidade
-verification_url = f'https://esprn.saude.rn.gov.br/ngtes/verificar/?id={declaracao.id}'
-
-# Crie o QR code
-qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-)
-qr.add_data(verification_url)
-qr.make(fit=True)
-
-# Crie uma imagem do QR code
-qr_img = qr.make_image(fill_color="black", back_color="white")
-
-# Salve a imagem em um arquivo
-qr_img.save("declaracao_qr.png")
-
-
-def verificar_autenticidade(request):
-    declaracao = None
-    mensagem = None
-
+def autenticar_declaracao(request):
     if request.method == 'POST':
-        id_declaracao = request.POST.get('id_declaracao')
+        codigo_autenticacao = request.POST.get('codigo_autenticacao')
+        declaracao_emitida = get_object_or_404(DeclaracaoEmitida, codigo_autenticacao=codigo_autenticacao)
+        return render(request, 'declaracao_autenticada.html', {'declaracao_emitida': declaracao_emitida})
+    return render(request, 'autenticar_declaracao.html')
 
-        try:
-            declaracao = Declaracao.objects.get(id=id_declaracao)
-            mensagem = "A declaração é autêntica."
-        except Declaracao.DoesNotExist:
-            declaracao = None
-            mensagem = "A declaração não foi encontrada ou não é autêntica."
+import random
+import string
 
-    # Construa a URL de verificação aqui, independentemente do método HTTP
-    verification_url = f'https://esprn.saude.rn.gov.br/ngtes/verificar/?id={declaracao.id}' if declaracao else ''
-
-    return render(request, 'verificacao_resultado.html', {'declaracao': declaracao, 'mensagem': mensagem, 'verification_url': verification_url})
+def gerar_codigo_unico(length=10):
+    caracteres = string.ascii_letters + string.digits
+    return ''.join(random.choice(caracteres) for _ in range(length))

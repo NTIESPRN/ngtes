@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+  <div class="col s12">
+    <h1>Autenticar Declaração</h1>
+    <form method="post">
+      {% csrf_token %}
+      <div class="input-field">
+        <input type="text" name="codigo_autenticacao" id="codigo_autenticacao" required>
+        <label for="codigo_autenticacao">Código de Autenticação</label>
+      </div>
+      <button class="btn waves-effect waves-light" type="submit">Autenticar</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

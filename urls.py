@@ -34,7 +34,7 @@ urlpatterns = [
     path('accounts/profile/', auth_views.LoginView.as_view(template_name='perfil.html'), name='profile'),
     path('declaracao/', views.emitir_declaracao, name='emitir_declaracao'),
     path('emitir_declaracao/<int:declaracao_id>/', views.emitir_declaracao, name='gerar_declaracao_pdf'),
-    path('verificar/', views.verificar_autenticidade, name='verificar_autenticidade'),
+    path('autenticar/', views.autenticar_declaracao, name='autenticar_declaracao'),
 
 
 

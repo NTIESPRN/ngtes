@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+  <div class="col s12">
+    <h1>Declaração Autenticada</h1>
+    <p>Código de Autenticação: {{ declaracao_emitida.codigo_autenticacao }}</p>
+    <p>Data de Emissão: {{ declaracao_emitida.data_emissao }}</p>
+    <!-- Exibir detalhes da declaração aqui conforme necessário -->
+    <a href="{% url 'autenticar_declaracao' %}" class="btn waves-effect waves-light">Autenticar outra declaração</a>
+  </div>
+</div>
+{% endblock %}
