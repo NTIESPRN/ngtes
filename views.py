@@ -328,13 +328,13 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import Image
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
-from .models import Declaracao, DeclaracaoEmitida
+from .models import DeclaracaoEmitida
 
 def emitir_declaracao(request):
     sucesso = False
 
     if request.method == 'POST':
-        form = DeclaracaoForm(request.POST)
+        form = DeclaracaoEmitidaForm(request.POST)
         if form.is_valid():
             declaracao_emitida = DeclaracaoEmitida(
                 codigo_autenticacao=gerar_codigo_unico(),
