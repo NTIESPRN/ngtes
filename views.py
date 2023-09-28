@@ -320,14 +320,16 @@ def substituir_documento(request, documento_id):
     return render(request, 'substituir_documento.html', {'servidor': servidor, 'form': form})
 
 
+import qrcode
+from PIL import Image as PilImage
+from io import BytesIO
 from reportlab.lib.units import inch
 from django.http import HttpResponse
-from io import BytesIO
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import Image
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
+from .models import DeclaracaoEmitida
 
 def emitir_declaracao(request):
     sucesso = False
@@ -341,6 +343,19 @@ def emitir_declaracao(request):
                 curso=form.cleaned_data['curso'],
             )
             declaracao_emitida.save()
+
+            # Gerar o QR code
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+            )
+            url_autenticacao = 'https://esprn.saude.rn.gov.br/ngtes/autenticar/'
+            qr.add_data(url_autenticacao)
+            qr.make(fit=True)
+
+            qr_image = qr.make_image(fill_color="black", back_color="white")
 
             buffer = BytesIO()
             doc = SimpleDocTemplate(
@@ -388,10 +403,23 @@ def emitir_declaracao(request):
             corpo_declaracao = [
                 Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao_emitida.docente.nome}</strong>, inscrito(a) sob o CPF nº <strong>{declaracao_emitida.docente.cpf}</strong>, exerceu atividades como tutor(a) do curso <strong>{declaracao_emitida.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de {declaracao_emitida.curso.carga_horaria} horas.", estilo_corpo),
                 Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", estilo_corpo),  
-
             ]
 
             conteudo.extend(corpo_declaracao)
+
+            # Inserir o QR code no rodapé
+            qr_image_pil = PilImage.open(BytesIO(qr_image.tobytes()))
+            qr_image_pil = qr_image_pil.resize((100, 100), PilImage.ANTIALIAS)
+
+            qr_image_io = BytesIO()
+            qr_image_pil.save(qr_image_io, 'JPEG')
+
+            qr_image_reportlab = Image(qr_image_io)
+            qr_image_reportlab.drawHeight = 1.25*inch
+            qr_image_reportlab.drawWidth = 1.25*inch
+
+            conteudo.append(Spacer(1, 0.5 * inch))
+            conteudo.append(qr_image_reportlab)
 
             doc.build(conteudo)
 
