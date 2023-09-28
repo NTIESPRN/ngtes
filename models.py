@@ -280,8 +280,6 @@ class DeclaracaoEmitida(models.Model):
     declaracao = models.ForeignKey(Declaracao, on_delete=models.CASCADE)  # Referência à declaração emitida
     codigo_autenticacao = models.CharField(max_length=10, unique=True)  # Código de autenticação único
     data_emissao = models.DateTimeField(auto_now_add=True)  # Data e hora de emissão
-    docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Código de Autenticação: {self.codigo_autenticacao}"
