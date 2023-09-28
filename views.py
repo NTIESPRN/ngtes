@@ -441,8 +441,7 @@ def verificar_autenticidade(request):
             declaracao = None
             mensagem = "A declaração não foi encontrada ou não é autêntica."
 
-    # Verifica se declaracao é None e define um valor padrão para evitar erros
-    if declaracao is None:
-        mensagem = "Código não válido."  # Pode ajustar a mensagem conforme necessário
+    # Construa a URL de verificação aqui, independentemente do método HTTP
+    verification_url = f'https://esprn.saude.rn.gov.br/ngtes/verificar/?id={declaracao.id}' if declaracao else ''
 
-    return render(request, 'verificacao_resultado.html', {'declaracao': declaracao, 'mensagem': mensagem})
+    return render(request, 'verificacao_resultado.html', {'declaracao': declaracao, 'mensagem': mensagem, 'verification_url': verification_url})
