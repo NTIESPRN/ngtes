@@ -329,6 +329,8 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Image
 from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.enums import TA_CENTER
+
 
 def emitir_declaracao(request):
     sucesso = False  # Defina a variável sucesso como False por padrão
