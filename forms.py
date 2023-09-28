@@ -65,4 +65,3 @@ class DeclaracaoEmitidaForm(forms.ModelForm):
     class Meta:
         model = DeclaracaoEmitida
         fields = '__all__'
-    codigo_autenticacao = forms.CharField(widget=forms.HiddenInput())
