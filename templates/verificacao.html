@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col s12">
+    <h2 class="header">Verificação de Autenticidade</h2>
+    <div class="card">
+      <div class="card-content">
+        <p>Insira o código QR ou o ID da declaração para verificar a autenticidade:</p>
+        <form method="POST" action="">
+          {% csrf_token %}
+          <div class="input-field">
+            <input type="text" name="id_declaracao" id="id_declaracao" required>
+            <label for="id_declaracao">Código QR ou ID da Declaração</label>
+          </div>
+          <button class="btn waves-effect waves-light" type="submit">Verificar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

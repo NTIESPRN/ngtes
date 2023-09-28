@@ -403,3 +403,42 @@ def emitir_declaracao(request):
     declaracoes_emitidas = Declaracao.objects.all()
 
     return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas})
+
+import qrcode
+from PIL import Image
+
+# URL da página de verificação de autenticidade
+verification_url = f'https://esprn.saude.rn.gov.br/ngtes/verificar/?id={declaracao.id}'
+
+# Crie o QR code
+qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+)
+qr.add_data(verification_url)
+qr.make(fit=True)
+
+# Crie uma imagem do QR code
+qr_img = qr.make_image(fill_color="black", back_color="white")
+
+# Salve a imagem em um arquivo
+qr_img.save("declaracao_qr.png")
+
+
+def verificar_autenticidade(request):
+    declaracao = None
+    mensagem = None
+
+    if request.method == 'POST':
+        id_declaracao = request.POST.get('id_declaracao')
+        
+        try:
+            declaracao = Declaracao.objects.get(id=id_declaracao)
+            mensagem = "A declaração é autêntica."
+        except Declaracao.DoesNotExist:
+            declaracao = None
+            mensagem = "A declaração não foi encontrada ou não é autêntica."
+
+    return render(request, 'verificacao_resultado.html', {'declaracao': declaracao, 'mensagem': mensagem})

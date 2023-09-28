@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col s12">
+    <h2 class="header">Resultado da Verificação</h2>
+    <div class="card">
+      <div class="card-content">
+        {% if declaracao %}
+        <p>A declaração com ID {{ declaracao.id }} é autêntica.</p>
+        <!-- Aqui você pode exibir mais detalhes da declaração, se necessário -->
+        {% else %}
+        <p>{{ mensagem }}</p>
+        {% endif %}
+        <a href="{% url 'verificar_autenticidade' %}" class="waves-effect waves-light btn">Voltar para a página de verificação</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
