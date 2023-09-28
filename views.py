@@ -320,7 +320,6 @@ def substituir_documento(request, documento_id):
     return render(request, 'substituir_documento.html', {'servidor': servidor, 'form': form})
 
 
-
 from reportlab.lib.units import inch
 from django.http import HttpResponse
 from io import BytesIO
@@ -328,24 +327,21 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Image
-from reportlab.lib.styles import ParagraphStyle
-from reportlab.lib.enums import TA_CENTER
 
+from .models import Declaracao  # Certifique-se de importar o modelo correto
 
 def emitir_declaracao(request):
-    sucesso = False  # Defina a variável sucesso como False por padrão
+    sucesso = False
     declaracao = None
+
     if request.method == 'POST':
         form = DeclaracaoForm(request.POST)
         if form.is_valid():
             declaracao = form.save()
 
-            # Criar um objeto BytesIO para armazenar o PDF em memória
             buffer = BytesIO()
-
-            # Criar o objeto PDF, usando o objeto BytesIO como "arquivo"
             doc = SimpleDocTemplate(
-                'declaracao.pdf',
+                buffer,
                 pagesize=letter,
                 rightMargin=72,
                 leftMargin=72,
@@ -353,63 +349,44 @@ def emitir_declaracao(request):
                 bottomMargin=18
             )
 
-
-            custom_style = ParagraphStyle(
-                name='CustomStyle',
-                fontSize=12,
-                leading=14,
-                spaceBefore=6,
-                alignment=TA_CENTER,  # Substitua TA_CENTER pelo alinhamento desejado
-                fontName='Helvetica-Bold',  # Substitua pela fonte desejada
-            )
-
-            # Conteúdo do PDF (substitua com seus próprios dados)
             conteudo = []
-
-            # Estilo para os parágrafos
             styles = getSampleStyleSheet()
 
-            # Adicionar a logo no início do documento
             logo_path = 'https://esprn.saude.rn.gov.br/extensao/imagens/logo.png'
             logo = Image(logo_path, width=2*inch, height=1*inch)
             conteudo.append(logo)
 
-            # Adicionar o cabeçalho da declaração
             cabecalho = [
-                Paragraph("<strong>SECRETARIA DE ESTADO DA SAÚDE PÚBLICA</strong>", style=custom_style), "",
-                Paragraph("<strong>Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240</strong>", style=custom_style), "",
-                Paragraph("<strong>Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br</strong>", style=custom_style), "",
-                Spacer(1, 0.2 * inch),  # Linha de espaço
-                Paragraph("<strong>DECLARAÇÃO</strong>", style=custom_style),  # Centralize e aplique negrito
+                Paragraph("<strong>SECRETARIA DE ESTADO DA SAÚDE PÚBLICA</strong>", styles['Normal']),
+                Paragraph("<strong>Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240</strong>", styles['Normal']),
+                Paragraph("<strong>Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br</strong>", styles['Normal']),
+                Spacer(1, 0.2 * inch),
+                Paragraph("<strong>DECLARAÇÃO</strong>", styles['Heading1']),
             ]
             conteudo.extend(cabecalho)
 
-            # Adicionar uma linha de espaço
-            conteudo.append([Spacer(1, 0.2*inch)])
+            conteudo.append(Spacer(1, 0.2*inch))
 
             corpo_declaracao = [
-                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutora do curso", style=custom_style),
-                Paragraph(f"<strong>{declaracao.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", style=custom_style),
-                Paragraph(f"<strong>{declaracao.curso.carga_horaria}</strong>.", style=custom_style),
+                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutora do curso", styles['Normal']),
+                Paragraph(f"<strong>{declaracao.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", styles['Normal']),
+                Paragraph(f"<strong>{declaracao.curso.carga_horaria}</strong>.", styles['Normal']),
             ]
 
             conteudo.extend(corpo_declaracao)
 
-            # Construir o PDF
             doc.build(conteudo)
 
-            # Retornar o PDF como resposta HTTP
             buffer.seek(0)
             response = HttpResponse(buffer, content_type='application/pdf')
-            response['Content-Disposition'] = f'attachment; filename=declaracao.pdf'
-            sucesso = True  # Defina sucesso como True após a emissão bem-sucedida
+            response['Content-Disposition'] = 'attachment; filename=declaracao.pdf'
+            sucesso = True
 
             return response
 
     else:
         form = DeclaracaoForm()
 
-    # Recupere todas as declarações emitidas
-    declaracoes_emitidas = Declaracao.objects.all()  # Substitua 'Declaracao' pelo nome do seu modelo de declaração
+    declaracoes_emitidas = Declaracao.objects.all()
 
     return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas})
