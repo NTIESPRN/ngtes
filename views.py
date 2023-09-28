@@ -427,13 +427,14 @@ qr_img = qr.make_image(fill_color="black", back_color="white")
 qr_img.save("declaracao_qr.png")
 
 
+
 def verificar_autenticidade(request):
     declaracao = None
     mensagem = None
 
     if request.method == 'POST':
         id_declaracao = request.POST.get('id_declaracao')
-        
+
         try:
             declaracao = Declaracao.objects.get(id=id_declaracao)
             mensagem = "A declaração é autêntica."
