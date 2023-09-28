@@ -368,7 +368,7 @@ def emitir_declaracao(request):
                 Paragraph("<strong>Av. Alexandrino de Alencar, 1850 – Tirol – Natal/RN – CEP 59015-350 – Telefone (84) 3232 7634 / 7628</strong>", estilo_ccabecalho),
                 Paragraph("<strong>www.esprn.rn.gov.br</strong>", estilo_ccabecalho),
                 Spacer(1, 0.2 * inch),
-                Paragraph("<strong>DECLARAÇÃO</strong>", estilo_ccabecalho),
+                Paragraph("<strong>DECLARAÇÃO</strong>", style=ParagraphStyle(name='DeclaracaoEstilo', parent=estilo_cabecalho, fontSize=16, alignment=TA_CENTER)),
             ]
 
             conteudo.extend(cabecalho)
