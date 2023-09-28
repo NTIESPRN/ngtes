@@ -35,6 +35,8 @@ urlpatterns = [
     path('declaracao/', views.emitir_declaracao, name='emitir_declaracao'),
     path('emitir_declaracao/<int:declaracao_id>/', views.emitir_declaracao, name='gerar_declaracao_pdf'),
     path('autenticar/', views.autenticar_declaracao, name='autenticar_declaracao'),
+    path('codigo_inexistente/', views.codigo_inexistente, name='codigo_inexistente'),
+
 
 
 

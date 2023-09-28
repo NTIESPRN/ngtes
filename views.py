@@ -414,14 +414,11 @@ def autenticar_declaracao(request):
     if request.method == 'POST':
         codigo_autenticacao = request.POST.get('codigo_autenticacao')
         declaracao_emitida = get_object_or_404(DeclaracaoEmitida, codigo_autenticacao=codigo_autenticacao)
-
-        if declaracao_emitida:
-            return render(request, 'declaracao_autenticada.html', {'declaracao_emitida': declaracao_emitida})
-        else:
-            messages.error(request, 'Nenhuma declaração foi encontrada com o código de autenticação utilizado.')
-            return render(request, 'autenticar_declaracao.html')
-
+        return render(request, 'declaracao_autenticada.html', {'declaracao_emitida': declaracao_emitida})
     return render(request, 'autenticar_declaracao.html')
+
+def codigo_inexistente(request):
+    return render(request, 'codigo_inexistente.html')
 
 import random
 import string
