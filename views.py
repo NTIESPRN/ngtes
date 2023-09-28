@@ -405,7 +405,7 @@ def emitir_declaracao(request):
 
     declaracoes_emitidas = DeclaracaoEmitida.objects.all()  # Atualize para buscar as declarações emitidas
 
-    return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas})
+    return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas, 'declaracao': declaracao})
 
 from .models import DeclaracaoEmitida
 
