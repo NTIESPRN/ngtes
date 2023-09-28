@@ -407,18 +407,17 @@ def emitir_declaracao(request):
 
     return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas})
 
-from django.contrib import messages  # Importe o módulo de mensagens do Django
 from .models import DeclaracaoEmitida
 
 def autenticar_declaracao(request):
     if request.method == 'POST':
         codigo_autenticacao = request.POST.get('codigo_autenticacao')
-        declaracao_emitida = get_object_or_404(DeclaracaoEmitida, codigo_autenticacao=codigo_autenticacao)
-        return render(request, 'declaracao_autenticada.html', {'declaracao_emitida': declaracao_emitida})
+        try:
+            declaracao_emitida = DeclaracaoEmitida.objects.get(codigo_autenticacao=codigo_autenticacao)
+            return render(request, 'declaracao_autenticada.html', {'declaracao_emitida': declaracao_emitida})
+        except DeclaracaoEmitida.DoesNotExist:
+            return render(request, 'codigo_inexistente.html')
     return render(request, 'autenticar_declaracao.html')
-
-def codigo_inexistente(request):
-    return render(request, 'codigo_inexistente.html')
 
 import random
 import string
