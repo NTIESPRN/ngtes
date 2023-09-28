@@ -332,12 +332,16 @@ from .models import Declaracao, DeclaracaoEmitida
 
 def emitir_declaracao(request):
     sucesso = False
-    declaracao = None
 
     if request.method == 'POST':
         form = DeclaracaoForm(request.POST)
         if form.is_valid():
-            declaracao = form.save()
+            declaracao_emitida = DeclaracaoEmitida(
+                codigo_autenticacao=gerar_codigo_unico(),
+                docente=form.cleaned_data['docente'],
+                curso=form.cleaned_data['curso'],
+            )
+            declaracao_emitida.save()
 
             buffer = BytesIO()
             doc = SimpleDocTemplate(
@@ -403,9 +407,9 @@ def emitir_declaracao(request):
     else:
         form = DeclaracaoForm()
 
-    declaracoes_emitidas = DeclaracaoEmitida.objects.all()  # Atualize para buscar as declarações emitidas
+    declaracoes_emitidas = DeclaracaoEmitida.objects.all()
 
-    return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas,})
+    return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas})
 
 from .models import DeclaracaoEmitida
 

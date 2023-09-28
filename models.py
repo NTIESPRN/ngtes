@@ -263,21 +263,8 @@ class Documento(models.Model):
     def __str__(self):
         return f"{self.servidor.nome} - {self.tipo}"
 
-from django.utils import timezone
-
-class Declaracao(models.Model):
-    data_emissao = models.DateField(default=timezone.now)
-    docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
-    # Outros campos da declaração
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-    
 
 class DeclaracaoEmitida(models.Model):
-    declaracao = models.ForeignKey(Declaracao, on_delete=models.CASCADE)  # Referência à declaração emitida
     codigo_autenticacao = models.CharField(max_length=10, unique=True)  # Código de autenticação único
     data_emissao = models.DateTimeField(auto_now_add=True)  # Data e hora de emissão
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
