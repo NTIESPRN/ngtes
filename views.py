@@ -328,7 +328,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import Image
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
-from .models import Declaracao
+from .models import Declaracao, DeclaracaoEmitida
 
 def emitir_declaracao(request):
     sucesso = False
@@ -403,7 +403,7 @@ def emitir_declaracao(request):
     else:
         form = DeclaracaoForm()
 
-    declaracoes_emitidas = Declaracao.objects.all()
+    declaracoes_emitidas = DeclaracaoEmitida.objects.all()  # Atualize para buscar as declarações emitidas
 
     return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas})
 
