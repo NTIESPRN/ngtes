@@ -393,7 +393,7 @@ def emitir_declaracao(request):
 
             doc.build(conteudo)
 
-            declaracao_emitida = DeclaracaoEmitida(declaracao=declaracao_emitida, codigo_autenticacao=gerar_codigo_unico())
+            declaracao_emitida = DeclaracaoEmitida(declaracao_emitida=declaracao_emitida, codigo_autenticacao=gerar_codigo_unico())
             declaracao_emitida.save()
 
             buffer.seek(0)
