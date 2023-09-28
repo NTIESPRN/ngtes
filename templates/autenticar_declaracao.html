@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
 <div class="row">
   <div class="col s12">
     <h1>Autenticar Declaração</h1>
+    {% if messages %}
+      <div class="red-text">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      </div>
+    {% endif %}
     <form method="post">
       {% csrf_token %}
       <div class="input-field">
