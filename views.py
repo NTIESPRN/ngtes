@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Docente, Curso, Servidor, Documento, Declaracao
-from .forms import DocenteForm, CursoForm, ServidorForm, DeclaracaoForm
+from .models import Docente, Curso, Servidor, Documento, DeclaracaoEmitida
+from .forms import DocenteForm, CursoForm, ServidorForm, DeclaracaoEmitidaForm
 from django.http import FileResponse
 import openpyxl
 from openpyxl.utils import get_column_letter
