@@ -1,5 +1,5 @@
 from django import forms
-from .models import Docente, Curso, Declaracao
+from .models import Docente, Curso, DeclaracaoEmitida
 
 class DocenteForm(forms.ModelForm):
     form_name = 'DocenteForm'
@@ -63,5 +63,5 @@ class DocumentoForm(forms.ModelForm):
 
 class DeclaracaoEmitidaForm(forms.ModelForm):
     class Meta:
-        model = Declaracao
+        model = DeclaracaoEmitida
         fields = '__all__'
