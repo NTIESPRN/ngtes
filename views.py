@@ -341,7 +341,14 @@ def emitir_declaracao(request):
             buffer = BytesIO()
 
             # Criar o objeto PDF, usando o objeto BytesIO como "arquivo"
-            doc = SimpleDocTemplate(buffer, pagesize=letter)
+            doc = SimpleDocTemplate(
+                'declaracao.pdf',
+                pagesize=letter,
+                rightMargin=72,
+                leftMargin=72,
+                topMargin=72,
+                bottomMargin=18
+            )
 
             # Conteúdo do PDF (substitua com seus próprios dados)
             conteudo = []
@@ -356,11 +363,11 @@ def emitir_declaracao(request):
 
             # Adicionar o cabeçalho da declaração
             cabecalho = [
-                [Paragraph("<strong>SECRETARIA DE ESTADO DA SAÚDE PÚBLICA</strong>", styles['Normal']), ""],
-                [Paragraph("<strong>Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240</strong>", styles['Normal']), ""],
-                [Paragraph("<strong>Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br</strong>", styles['Normal']), ""],
-                [Spacer(1, 0.2 * inch)],  # Linha de espaço
-                [Paragraph("<strong>DECLARAÇÃO</strong>", styles['Normal'])],  # Centralize e aplique negrito
+                Paragraph("<strong>SECRETARIA DE ESTADO DA SAÚDE PÚBLICA</strong>", style=styles['p']), "",
+                Paragraph("<strong>Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240</strong>", style=styles['p']), "",
+                Paragraph("<strong>Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br</strong>", style=styles['p']), "",
+                Spacer(1, 0.2 * inch),  # Linha de espaço
+                Paragraph("<strong>DECLARAÇÃO</strong>", style=styles['h1']),  # Centralize e aplique negrito
             ]
             conteudo.extend(cabecalho)
 
@@ -368,9 +375,9 @@ def emitir_declaracao(request):
             conteudo.append([Spacer(1, 0.2*inch)])
 
             corpo_declaracao = [
-                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutora do curso", styles['Normal']),
-                Paragraph(f"<strong>{declaracao.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", styles['Normal']),
-                Paragraph(f"<strong>{declaracao.curso.carga_horaria}</strong>.", styles['Normal']),
+                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutora do curso", style=styles['p']),
+                Paragraph(f"<strong>{declaracao.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", style=styles['p']),
+                Paragraph(f"<strong>{declaracao.curso.carga_horaria}</strong>.", style=styles['p']),
             ]
 
             conteudo.extend(corpo_declaracao)
