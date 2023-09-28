@@ -78,9 +78,9 @@
   <tbody>
     {% for declaracao in declaracoes_emitidas %}
     <tr>
-      <td>{{ declaracao.docente.nome }}</td>
-      <td>{{ declaracao.curso.nome }}</td>
-      <td>{{ declaracao.data_emissao }}</td>
+      <td>{{ declaracao_emitida.docente.nome }}</td>
+      <td>{{ declaracao_emitida.curso.nome }}</td>
+      <td>{{ declaracao_emitida.data_emissao }}</td>
       <!-- Adicione outras colunas da sua declaração, se necessário -->
     </tr>
     {% empty %}
