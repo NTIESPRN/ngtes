@@ -321,7 +321,6 @@ def substituir_documento(request, documento_id):
 
 
 import qrcode
-from PIL import Image as PilImage
 from io import BytesIO
 from reportlab.lib.units import inch
 from django.http import HttpResponse
@@ -329,7 +328,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
-from .models import DeclaracaoEmitida
+from PIL import Image as PilImage  # Importe o PIL
 
 def emitir_declaracao(request):
     sucesso = False
@@ -356,6 +355,10 @@ def emitir_declaracao(request):
             qr.make(fit=True)
 
             qr_image = qr.make_image(fill_color="black", back_color="white")
+
+            # Converter o QR code para o formato PNG
+            qr_image_io = BytesIO()
+            qr_image.save(qr_image_io, format='PNG')
 
             buffer = BytesIO()
             doc = SimpleDocTemplate(
@@ -408,13 +411,10 @@ def emitir_declaracao(request):
             conteudo.extend(corpo_declaracao)
 
             # Inserir o QR code no rodapé
-            qr_image_pil = PilImage.open(BytesIO(qr_image.tobytes()))
+            qr_image_pil = PilImage.open(qr_image_io)
             qr_image_pil = qr_image_pil.resize((100, 100), PilImage.ANTIALIAS)
 
-            qr_image_io = BytesIO()
-            qr_image_pil.save(qr_image_io, 'JPEG')
-
-            qr_image_reportlab = Image(qr_image_io)
+            qr_image_reportlab = Image(qr_image_pil)
             qr_image_reportlab.drawHeight = 1.25*inch
             qr_image_reportlab.drawWidth = 1.25*inch
 
