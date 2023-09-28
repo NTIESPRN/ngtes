@@ -325,7 +325,7 @@ from django.http import HttpResponse
 from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import Image
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
 from .models import Declaracao
