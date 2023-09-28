@@ -367,6 +367,7 @@ def emitir_declaracao(request):
                 Paragraph("<strong>Parecer CES/CEE-RN N°03/2021 31 de março de 2021</strong>", estilo_ccabecalho),
                 Paragraph("<strong>Av. Alexandrino de Alencar, 1850 – Tirol – Natal/RN – CEP 59015-350 – Telefone (84) 3232 7634 / 7628</strong>", estilo_ccabecalho),
                 Paragraph("<strong>www.esprn.rn.gov.br</strong>", estilo_ccabecalho),
+                Spacer(1, 0.2 * inch),
                 Paragraph("<strong>DECLARAÇÃO</strong>", estilo_ccabecalho),
             ]
 
