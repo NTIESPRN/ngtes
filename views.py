@@ -356,12 +356,18 @@ def emitir_declaracao(request):
             logo = Image(logo_path, width=2*inch, height=2*inch)
             conteudo.append(logo)
 
+            estilo_ccabecalho = ParagraphStyle(
+                'CorpoEstilo',
+                parent=styles['Normal'], 
+                alignment=TA_CENTER,
+            )
+
             cabecalho = [
-                Paragraph("<strong>Escola de Saúde Pública do Rio Grande do Norte</strong>", styles['Center']),
-                Paragraph("<strong>Parecer CES/CEE-RN N°03/2021 31 de março de 2021</strong>", styles['Center']),
-                Paragraph("<strong>Av. Alexandrino de Alencar, 1850 – Tirol – Natal/RN – CEP 59015-350 – Telefone (84) 3232 7634 / 7628</strong>", styles['Center']),
-                Paragraph("<strong>www.esprn.rn.gov.br</strong>", styles['Center']),
-                Paragraph("<strong>DECLARAÇÃO</strong>", styles['Center']),
+                Paragraph("<strong>Escola de Saúde Pública do Rio Grande do Norte</strong>", estilo_ccabecalho),
+                Paragraph("<strong>Parecer CES/CEE-RN N°03/2021 31 de março de 2021</strong>", estilo_ccabecalho),
+                Paragraph("<strong>Av. Alexandrino de Alencar, 1850 – Tirol – Natal/RN – CEP 59015-350 – Telefone (84) 3232 7634 / 7628</strong>", estilo_ccabecalho),
+                Paragraph("<strong>www.esprn.rn.gov.br</strong>", estilo_ccabecalho),
+                Paragraph("<strong>DECLARAÇÃO</strong>", estilo_ccabecalho),
             ]
 
             conteudo.extend(cabecalho)
