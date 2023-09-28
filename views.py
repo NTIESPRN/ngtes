@@ -369,6 +369,7 @@ def emitir_declaracao(request):
                 Paragraph("<strong>www.esprn.rn.gov.br</strong>", estilo_ccabecalho),
                 Spacer(1, 0.2 * inch),
                 Paragraph("<strong>DECLARAÇÃO</strong>", style=ParagraphStyle(name='DeclaracaoEstilo', fontSize=16, alignment=TA_CENTER)),
+                Spacer(1, 0.2 * inch),
             ]
 
             conteudo.extend(cabecalho)
