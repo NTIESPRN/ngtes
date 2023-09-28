@@ -357,7 +357,7 @@ def emitir_declaracao(request):
             conteudo.append(logo)
 
             estilo_ccabecalho = ParagraphStyle(
-                'CorpoEstilo',
+                'CabecalhoEstilo',
                 parent=styles['Normal'], 
                 alignment=TA_CENTER,
             )
