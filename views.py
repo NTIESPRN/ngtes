@@ -404,7 +404,7 @@ def emitir_declaracao(request):
             return response
 
     else:
-        form = DeclaracaoForm()
+        form = DeclaracaoEmitidaForm()
 
     declaracoes_emitidas = DeclaracaoEmitida.objects.all()
 
