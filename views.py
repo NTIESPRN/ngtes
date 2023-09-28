@@ -320,6 +320,7 @@ def substituir_documento(request, documento_id):
     return render(request, 'substituir_documento.html', {'servidor': servidor, 'form': form})
 
 
+
 import qrcode
 from io import BytesIO
 from reportlab.lib.units import inch
@@ -328,7 +329,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
-from PIL import Image as PilImage  # Importe o PIL
+from PIL import Image as PilImage
+import base64  # Importe base64
 
 def emitir_declaracao(request):
     sucesso = False
@@ -356,9 +358,10 @@ def emitir_declaracao(request):
 
             qr_image = qr.make_image(fill_color="black", back_color="white")
 
-            # Converter o QR code para o formato PNG
-            qr_image_io = BytesIO()
-            qr_image.save(qr_image_io, format='PNG')
+            # Converter o QR code para base64
+            buffered = BytesIO()
+            qr_image.save(buffered, format="PNG")
+            qr_image_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
 
             buffer = BytesIO()
             doc = SimpleDocTemplate(
@@ -405,19 +408,14 @@ def emitir_declaracao(request):
 
             corpo_declaracao = [
                 Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao_emitida.docente.nome}</strong>, inscrito(a) sob o CPF nº <strong>{declaracao_emitida.docente.cpf}</strong>, exerceu atividades como tutor(a) do curso <strong>{declaracao_emitida.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de {declaracao_emitida.curso.carga_horaria} horas.", estilo_corpo),
-                Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", estilo_corpo),  
+                Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", estilo_corpo),
             ]
 
             conteudo.extend(corpo_declaracao)
 
             # Inserir o QR code no rodapé
-            qr_image_pil = PilImage.open(qr_image_io)
-            qr_image_pil = qr_image_pil.resize((100, 100), PilImage.ANTIALIAS)
-
-            qr_image_reportlab = Image(qr_image_pil)
-            qr_image_reportlab.drawHeight = 1.25*inch
-            qr_image_reportlab.drawWidth = 1.25*inch
-
+            qr_image_base64_data = f"data:image/png;base64,{qr_image_base64}"
+            qr_image_reportlab = Image(qr_image_base64_data, width=1.25*inch, height=1.25*inch)
             conteudo.append(Spacer(1, 0.5 * inch))
             conteudo.append(qr_image_reportlab)
 
@@ -436,6 +434,7 @@ def emitir_declaracao(request):
     declaracoes_emitidas = DeclaracaoEmitida.objects.all()
 
     return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas})
+
 
 
 from .models import DeclaracaoEmitida
