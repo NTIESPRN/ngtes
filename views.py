@@ -328,6 +328,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Image
+from reportlab.lib.styles import ParagraphStyle
 
 def emitir_declaracao(request):
     sucesso = False  # Defina a variável sucesso como False por padrão
@@ -350,6 +351,16 @@ def emitir_declaracao(request):
                 bottomMargin=18
             )
 
+
+            custom_style = ParagraphStyle(
+                name='CustomStyle',
+                fontSize=12,
+                leading=14,
+                spaceBefore=6,
+                alignment=TA_CENTER,  # Substitua TA_CENTER pelo alinhamento desejado
+                fontName='Helvetica-Bold',  # Substitua pela fonte desejada
+            )
+
             # Conteúdo do PDF (substitua com seus próprios dados)
             conteudo = []
 
@@ -363,11 +374,11 @@ def emitir_declaracao(request):
 
             # Adicionar o cabeçalho da declaração
             cabecalho = [
-                Paragraph("<strong>SECRETARIA DE ESTADO DA SAÚDE PÚBLICA</strong>", style=styles['p']), "",
-                Paragraph("<strong>Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240</strong>", style=styles['p']), "",
-                Paragraph("<strong>Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br</strong>", style=styles['p']), "",
+                Paragraph("<strong>SECRETARIA DE ESTADO DA SAÚDE PÚBLICA</strong>", style=custom_style), "",
+                Paragraph("<strong>Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240</strong>", style=custom_style), "",
+                Paragraph("<strong>Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br</strong>", style=custom_style), "",
                 Spacer(1, 0.2 * inch),  # Linha de espaço
-                Paragraph("<strong>DECLARAÇÃO</strong>", style=styles['h1']),  # Centralize e aplique negrito
+                Paragraph("<strong>DECLARAÇÃO</strong>", style=custom_style),  # Centralize e aplique negrito
             ]
             conteudo.extend(cabecalho)
 
@@ -375,9 +386,9 @@ def emitir_declaracao(request):
             conteudo.append([Spacer(1, 0.2*inch)])
 
             corpo_declaracao = [
-                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutora do curso", style=styles['p']),
-                Paragraph(f"<strong>{declaracao.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", style=styles['p']),
-                Paragraph(f"<strong>{declaracao.curso.carga_horaria}</strong>.", style=styles['p']),
+                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutora do curso", style=custom_style),
+                Paragraph(f"<strong>{declaracao.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", style=custom_style),
+                Paragraph(f"<strong>{declaracao.curso.carga_horaria}</strong>.", style=custom_style),
             ]
 
             conteudo.extend(corpo_declaracao)
