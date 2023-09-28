@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Docente, Curso, export_to_excel, export_cursos_to_excel
+from .models import Docente, Curso, Declaracao, DeclaracaoEmitida, export_to_excel, export_cursos_to_excel
 from django.contrib import admin
 from openpyxl import Workbook
 from django.urls import reverse
@@ -9,6 +9,9 @@ from django.http import HttpResponse
 
 
 admin.site.site_header = 'Painel Administrativo'
+admin.site.register(Declaracao)
+admin.site.register(DeclaracaoEmitida)
+
 
 
 @admin.register(Docente)
