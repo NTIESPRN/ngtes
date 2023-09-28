@@ -327,8 +327,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Image
-
-from .models import Declaracao  # Certifique-se de importar o modelo correto
+from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
+from .models import Declaracao
 
 def emitir_declaracao(request):
     sucesso = False
@@ -357,20 +357,27 @@ def emitir_declaracao(request):
             conteudo.append(logo)
 
             cabecalho = [
-                Paragraph("<strong>SECRETARIA DE ESTADO DA SAÚDE PÚBLICA</strong>", styles['Normal']),
-                Paragraph("<strong>Av. Marechal Deodoro da Fonseca, 730, - Bairro Centro, Natal/RN, CEP 59012-240</strong>", styles['Normal']),
-                Paragraph("<strong>Telefone: e Fax: @fax_unidade@ - http://www.saude.gov.br</strong>", styles['Normal']),
-                Spacer(1, 0.2 * inch),
-                Paragraph("<strong>DECLARAÇÃO</strong>", styles['Heading1']),
+                Paragraph("<strong>Escola de Saúde Pública do Rio Grande do Norte</strong>", styles['Center']),
+                Paragraph("<strong>Parecer CES/CEE-RN N°03/2021 31 de março de 2021</strong>", styles['Center']),
+                Paragraph("<strong>Av. Alexandrino de Alencar, 1850 – Tirol – Natal/RN – CEP 59015-350 – Telefone (84) 3232 7634 / 7628</strong>", styles['Center']),
+                Paragraph("<strong>www.esprn.rn.gov.br</strong>", styles['Center']),
+                Paragraph("<strong>DECLARAÇÃO</strong>", styles['Center']),
             ]
+
             conteudo.extend(cabecalho)
 
             conteudo.append(Spacer(1, 0.2*inch))
 
+            estilo_corpo = ParagraphStyle(
+                'CorpoEstilo',
+                parent=styles['Normal'], 
+                alignment=TA_JUSTIFY,
+            )
+
             corpo_declaracao = [
-                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutor(a) do curso", styles['Normal']),
-                Paragraph(f"<strong>{declaracao.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", styles['Normal']),
-                Paragraph(f"<strong>{declaracao.curso.carga_horaria}</strong>.", styles['Normal']),
+                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao.docente.nome}</strong>, inscrita sob o CPF nº <strong>{declaracao.docente.cpf}</strong>, exerceu atividades como tutora do curso", estilo_corpo),  # Use o estilo personalizado
+                Paragraph(f"<strong>{declaracao.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de", estilo_corpo),  # Use o estilo personalizado
+                Paragraph(f"<strong>{declaracao.curso.carga_horaria}</strong>.", estilo_corpo),  # Use o estilo personalizado
             ]
 
             conteudo.extend(corpo_declaracao)
