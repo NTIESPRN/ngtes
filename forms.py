@@ -61,7 +61,7 @@ class DocumentoForm(forms.ModelForm):
                 self.fields[field].widget.attrs['class'] = 'validate'
 
 
-class DeclaracaoEmitida(forms.ModelForm):
+class DeclaracaoEmitidaForm(forms.ModelForm):
     class Meta:
         model = Declaracao
         fields = '__all__'
