@@ -393,9 +393,6 @@ def emitir_declaracao(request):
 
             doc.build(conteudo)
 
-            declaracao_emitida = DeclaracaoEmitida(declaracao_emitida=declaracao_emitida, codigo_autenticacao=gerar_codigo_unico())
-            declaracao_emitida.save()
-
             buffer.seek(0)
             response = HttpResponse(buffer, content_type='application/pdf')
             response['Content-Disposition'] = 'attachment; filename=declaracao.pdf'
@@ -409,6 +406,7 @@ def emitir_declaracao(request):
     declaracoes_emitidas = DeclaracaoEmitida.objects.all()
 
     return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas})
+
 
 from .models import DeclaracaoEmitida
 
