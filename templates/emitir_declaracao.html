@@ -76,7 +76,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for declaracao in declaracoes_emitidas %}
+    {% for declaracao_emitida in declaracoes_emitidas %}
     <tr>
       <td>{{ declaracao_emitida.docente.nome }}</td>
       <td>{{ declaracao_emitida.curso.nome }}</td>
@@ -90,6 +90,7 @@
     {% endfor %}
   </tbody>
 </table>
+
 
 <form method="post" action="{% url 'emitir_declaracao' %}">
   {% csrf_token %}
