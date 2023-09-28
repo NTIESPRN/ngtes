@@ -442,4 +442,8 @@ def verificar_autenticidade(request):
             declaracao = None
             mensagem = "A declaração não foi encontrada ou não é autêntica."
 
+    # Verifica se declaracao é None e define um valor padrão para evitar erros
+    if declaracao is None:
+        declaracao = "N/A"
+
     return render(request, 'verificacao_resultado.html', {'declaracao': declaracao, 'mensagem': mensagem})
