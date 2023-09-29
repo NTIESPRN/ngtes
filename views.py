@@ -494,3 +494,19 @@ import string
 def gerar_codigo_unico(length=10):
     caracteres = string.ascii_letters + string.digits
     return ''.join(random.choice(caracteres) for _ in range(length))
+
+
+
+def visualizar_declaracao(request, arquivo_pdf_nome):
+    # Construa o caminho completo para o arquivo PDF com base no nome do arquivo
+    pdf_filepath = os.path.join(settings.MEDIA_ROOT, 'declaracoes', arquivo_pdf_nome)
+
+    # Verifique se o arquivo PDF existe
+    if os.path.exists(pdf_filepath):
+        # Abra o arquivo e retorne como resposta
+        with open(pdf_filepath, 'rb') as pdf_file:
+            response = FileResponse(pdf_file, content_type='application/pdf')
+            return response
+    else:
+        # Caso o arquivo não seja encontrado, retorne um erro 404
+        raise Http404("Arquivo PDF não encontrado")
