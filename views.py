@@ -431,13 +431,25 @@ def emitir_declaracao(request):
             
             # Adicione o QR code e o código de autenticação no rodapé
             conteudo.append(Spacer(1, 0.2 * inch))
-            conteudo.extend([qr_image_reportlab, codigo_autenticacao_paragrafo])
         
          # Adicione o texto no rodapé abaixo do QR code e código de autenticação
             texto_rodape = Paragraph("Leia o Qr Code acima, ou acesse <strong>https://esprn.saude.rn.gov.br/ngtes/autenticar/ </strong>, e insira o código de autenticação acima para verificar a autenticidade desse documento.", rodape_style)
-            conteudo.append(Spacer(1, 0.2 * inch))
-            conteudo.append(texto_rodape)
 
+
+            # Crie uma tabela para organizar o QR code e o texto do rodapé
+            tabela = Table([
+                [qr_image_reportlab, ''],  # Coluna da esquerda para o QR code
+                ['', texto_rodape]  # Coluna da direita para o texto do rodapé
+            ], colWidths=[1.25*inch, 'auto'])
+
+            # Defina o estilo da tabela para alinhar os elementos
+            tabela.setStyle(TableStyle([
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),  # Alinhe à esquerda
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),  # Alinhe verticalmente ao meio
+            ]))
+
+            # Adicione a tabela ao conteúdo
+            conteudo.extend([tabela])
             doc.build(conteudo)
 
             buffer.seek(0)
