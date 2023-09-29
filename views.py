@@ -435,7 +435,7 @@ def emitir_declaracao(request):
             conteudo.append(Spacer(1, 0.2 * inch))
         
          # Adicione o texto no rodapé abaixo do QR code e código de autenticação
-            texto_rodape = Paragraph("Leia o Qr Code acima, ou acesse <strong>https://esprn.saude.rn.gov.br/ngtes/autenticar/ </strong>, e insira o código de autenticação acima para verificar a autenticidade desse documento.", rodape_style)
+            texto_rodape = Paragraph("Leia o Qr Code, ou acesse <strong>https://esprn.saude.rn.gov.br/ngtes/autenticar/ </strong>, e insira o código de autenticação acima para verificar a autenticidade desse documento.", rodape_style)
 
 
             # Crie uma tabela para organizar o QR code e o texto do rodapé
