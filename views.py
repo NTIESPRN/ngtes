@@ -320,6 +320,7 @@ def substituir_documento(request, documento_id):
     return render(request, 'substituir_documento.html', {'servidor': servidor, 'form': form})
 
 import os
+from django.conf import settings
 import qrcode
 from io import BytesIO
 from reportlab.lib.units import inch
