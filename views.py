@@ -416,8 +416,23 @@ def emitir_declaracao(request):
             # Inserir o QR code no rodapé
             qr_image_base64_data = f"data:image/png;base64,{qr_image_base64}"
             qr_image_reportlab = Image(qr_image_base64_data, width=1.25*inch, height=1.25*inch)
+            
+            # Defina o estilo do rodapé
+            rodape_style = ParagraphStyle(
+                'RodapeEstilo',
+                parent=styles['Normal'],
+                alignment=TA_CENTER,
+            )
+            
+            # Crie o parágrafo com o código de autenticação
+            codigo_autenticacao_paragrafo = Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", rodape_style)
+            
+            # Adicione espaço em branco
             conteudo.append(Spacer(1, 0.5 * inch))
-            conteudo.append(qr_image_reportlab)
+            
+            # Adicione o QR code e o código de autenticação no rodapé
+            conteudo.append(Spacer(1, 0.2 * inch))
+            conteudo.extend([qr_image_reportlab, codigo_autenticacao_paragrafo])
 
             doc.build(conteudo)
 
