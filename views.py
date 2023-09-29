@@ -406,6 +406,7 @@ def emitir_declaracao(request):
                 'CorpoEstilo',
                 parent=styles['Normal'], 
                 alignment=TA_JUSTIFY,
+                fontSize=14,
             )
 
             corpo_declaracao = [
