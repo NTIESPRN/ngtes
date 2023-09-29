@@ -35,7 +35,7 @@ urlpatterns = [
     path('declaracao/', views.emitir_declaracao, name='emitir_declaracao'),
     path('emitir_declaracao/<int:declaracao_id>/', views.emitir_declaracao, name='gerar_declaracao_pdf'),
     path('autenticar/', views.autenticar_declaracao, name='autenticar_declaracao'),
-    path('declaracoes/<str:arquivo_pdf_nome>/', views.visualizar_declaracao, name='visualizar_declaracao'),
+    path('declaracao/<str:arquivo_pdf_nome>/', views.visualizar_declaracao, name='visualizar_declaracao'),
 
 
 
