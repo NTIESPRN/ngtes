@@ -420,7 +420,7 @@ def emitir_declaracao(request):
             rodape_style = ParagraphStyle(
                 'RodapeEstilo',
                 parent=styles['Normal'],
-                alignment=TA_CENTER,
+                alignment=TA_JUSTIFY,
             )
             
             # Crie o parágrafo com o código de autenticação
