@@ -446,13 +446,17 @@ def emitir_declaracao(request):
 
             # Use o codigo_autenticacao como nome do arquivo PDF
             pdf_filename = f'{declaracao_emitida.codigo_autenticacao}.pdf'
-            pdf_filepath = os.path.join(settings.MEDIA_ROOT, pdf_filename)
+            pdf_filepath = os.path.join(settings.MEDIA_ROOT, 'declaracoes', pdf_filename)
 
             os.makedirs(os.path.dirname(pdf_filepath), exist_ok=True)
 
             buffer.seek(0)
             with open(pdf_filepath, 'wb') as pdf_file:
                 pdf_file.write(buffer.read())
+
+            # Salve o nome do arquivo PDF no campo arquivo_pdf_nome
+            declaracao_emitida.arquivo_pdf_nome = pdf_filename
+            declaracao_emitida.save()
 
             arquivo_pdf = pdf_filepath
 
@@ -469,7 +473,6 @@ def emitir_declaracao(request):
     declaracoes_emitidas = DeclaracaoEmitida.objects.all()
 
     return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas, 'arquivo_pdf': arquivo_pdf})
-
 
 
 
