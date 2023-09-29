@@ -320,7 +320,6 @@ def substituir_documento(request, documento_id):
     return render(request, 'substituir_documento.html', {'servidor': servidor, 'form': form})
 
 
-
 import qrcode
 from io import BytesIO
 from reportlab.lib.units import inch
@@ -330,12 +329,15 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
 from PIL import Image as PilImage
-import base64  # Importe base64
+import base64
 from reportlab.platypus import Table, TableStyle, PageBreak
 
+# Importe a função gerar_codigo_unico ou a lógica necessária para gerar o código único
+# Certifique-se de importar os modelos e formulários relevantes.
 
 def emitir_declaracao(request):
     sucesso = False
+    arquivo_pdf = None
 
     if request.method == 'POST':
         form = DeclaracaoEmitidaForm(request.POST)
@@ -414,49 +416,48 @@ def emitir_declaracao(request):
 
             conteudo.extend(corpo_declaracao)
 
-            # Inserir o QR code no rodapé
             qr_image_base64_data = f"data:image/png;base64,{qr_image_base64}"
             qr_image_reportlab = Image(qr_image_base64_data, width=1.25*inch, height=1.25*inch)
             
-            # Defina o estilo do rodapé
             rodape_style = ParagraphStyle(
                 'RodapeEstilo',
                 parent=styles['Normal'],
                 alignment=TA_CENTER,
             )
             
-            # Crie o parágrafo com o código de autenticação
             codigo_autenticacao_paragrafo = Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", rodape_style)
             
-            # Adicione espaço em branco
             conteudo.append(Spacer(1, 2.5 * inch))
             
-            # Adicione o QR code e o código de autenticação no rodapé
-            conteudo.append(Spacer(1, 0.2 * inch))
-        
-         # Adicione o texto no rodapé abaixo do QR code e código de autenticação
             texto_rodape = Paragraph("Leia o Qr Code, ou acesse <strong>https://esprn.saude.rn.gov.br/ngtes/autenticar/ </strong>, e insira o código de autenticação acima para verificar a autenticidade desse documento.", rodape_style)
 
-
-            # Crie uma tabela para organizar o QR code e o texto do rodapé
             tabela = Table([
-                [qr_image_reportlab, texto_rodape]  # Uma única coluna com QR code e texto
-            ], colWidths=[1.25*inch, 6*inch])  # Largura fixa para as colunas (ajuste conforme necessário)
+                [qr_image_reportlab, texto_rodape]
+            ], colWidths=[1.25*inch, 6*inch])
 
-
-            # Defina o estilo da tabela para alinhar os elementos
             tabela.setStyle(TableStyle([
-                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),  # Alinhe à esquerda
-                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),  # Alinhe verticalmente ao meio
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
             ]))
 
-            # Adicione a tabela ao conteúdo
             conteudo.extend([codigo_autenticacao_paragrafo, tabela])
             doc.build(conteudo)
 
+            # Use o codigo_autenticacao como nome do arquivo PDF
+            pdf_filename = f'{declaracao_emitida.codigo_autenticacao}.pdf'
+            pdf_filepath = os.path.join(settings.MEDIA_ROOT, pdf_filename)
+
+            os.makedirs(os.path.dirname(pdf_filepath), exist_ok=True)
+
+            buffer.seek(0)
+            with open(pdf_filepath, 'wb') as pdf_file:
+                pdf_file.write(buffer.read())
+
+            arquivo_pdf = pdf_filepath
+
             buffer.seek(0)
             response = HttpResponse(buffer, content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename=declaracao.pdf'
+            response['Content-Disposition'] = f'attachment; filename={pdf_filename}'
             sucesso = True
 
             return response
@@ -466,7 +467,8 @@ def emitir_declaracao(request):
 
     declaracoes_emitidas = DeclaracaoEmitida.objects.all()
 
-    return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas})
+    return render(request, 'emitir_declaracao.html', {'form': form, 'sucesso': sucesso, 'declaracoes_emitidas': declaracoes_emitidas, 'arquivo_pdf': arquivo_pdf})
+
 
 
 
