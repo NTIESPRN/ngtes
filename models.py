@@ -264,11 +264,13 @@ class Documento(models.Model):
         return f"{self.servidor.nome} - {self.tipo}"
 
 
+
 class DeclaracaoEmitida(models.Model):
-    codigo_autenticacao = models.CharField(max_length=10, unique=True)  # Código de autenticação único
-    data_emissao = models.DateTimeField(auto_now_add=True)  # Data e hora de emissão
+    codigo_autenticacao = models.CharField(max_length=50)
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    data_emissao = models.DateTimeField(auto_now_add=True)  # Pode ajustar conforme necessário
+    arquivo_pdf = models.FileField(upload_to='declaracoes/')  # Adicione o campo para o arquivo PDF
 
     def __str__(self):
-        return f"Código de Autenticação: {self.codigo_autenticacao}"
+        return f'Declaração emitida por {self.docente.nome} em {self.data_emissao}'
