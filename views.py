@@ -331,6 +331,8 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
 from PIL import Image as PilImage
 import base64  # Importe base64
+from reportlab.platypus import KeepTogether
+
 
 def emitir_declaracao(request):
     sucesso = False
