@@ -60,8 +60,7 @@ class DocumentoForm(forms.ModelForm):
             if field != 'id':  # Excluir o campo 'id' se você não quiser incluí-lo no formulário
                 self.fields[field].widget.attrs['class'] = 'validate'
 
-
 class DeclaracaoEmitidaForm(forms.ModelForm):
     class Meta:
         model = DeclaracaoEmitida
-        fields = '__all__'
+        fields = ['docente', 'curso']
