@@ -269,8 +269,8 @@ class DeclaracaoEmitida(models.Model):
     codigo_autenticacao = models.CharField(max_length=50)
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
-    data_emissao = models.DateTimeField(auto_now_add=True)  # Pode ajustar conforme necessário
-    arquivo_pdf = models.FileField(upload_to='declaracoes/')  # Adicione o campo para o arquivo PDF
+    data_emissao = models.DateTimeField(auto_now_add=True)
+    arquivo_pdf_nome = models.CharField(max_length=255)  # Campo para armazenar o nome do arquivo PDF
 
     def __str__(self):
         return f'Declaração emitida por {self.docente.nome} em {self.data_emissao}'
