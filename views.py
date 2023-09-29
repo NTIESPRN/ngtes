@@ -426,7 +426,7 @@ def emitir_declaracao(request):
             # Crie o parágrafo com o código de autenticação
             rodape = [ 
                 Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", rodape_style),
-                Paragraph(f"Leia o Qr Code acima, ou acesse https://esprn.saude.rn.gov.br/ngtes/autenticar/ , e insira o código de autenticação acima para verificar a autenticidade desse d</strong>", rodape_style),
+                
             ]
             # Adicione espaço em branco
             conteudo.append(Spacer(1, 2.5 * inch))
