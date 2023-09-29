@@ -408,7 +408,6 @@ def emitir_declaracao(request):
 
             corpo_declaracao = [
                 Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao_emitida.docente.nome}</strong>, inscrito(a) sob o CPF nº <strong>{declaracao_emitida.docente.cpf}</strong>, exerceu atividades como tutor(a) do curso <strong>{declaracao_emitida.curso.nome}</strong>, na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de {declaracao_emitida.curso.carga_horaria} horas.", estilo_corpo),
-                Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", estilo_corpo),
             ]
 
             conteudo.extend(corpo_declaracao)
@@ -425,14 +424,16 @@ def emitir_declaracao(request):
             )
             
             # Crie o parágrafo com o código de autenticação
-            codigo_autenticacao_paragrafo = Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", rodape_style)
-            
+            rodape = [ 
+                Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", rodape_style),
+                Paragraph(f"Leia o Qr Code acima, ou acesse https://esprn.saude.rn.gov.br/ngtes/autenticar/ , e insira o código de autenticação acima para verificar a autenticidade desse documento.</strong>", rodape_style),
+            ]
             # Adicione espaço em branco
             conteudo.append(Spacer(1, 2.5 * inch))
             
             # Adicione o QR code e o código de autenticação no rodapé
             conteudo.append(Spacer(1, 0.2 * inch))
-            conteudo.extend([qr_image_reportlab, codigo_autenticacao_paragrafo])
+            conteudo.extend([qr_image_reportlab, rodape])
 
             doc.build(conteudo)
 
