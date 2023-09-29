@@ -424,16 +424,14 @@ def emitir_declaracao(request):
             )
             
             # Crie o parágrafo com o código de autenticação
-            rodape = [ 
-                Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", rodape_style),
-                
-            ]
+            codigo_autenticacao_paragrafo = Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", rodape_style)
+            
             # Adicione espaço em branco
             conteudo.append(Spacer(1, 2.5 * inch))
             
             # Adicione o QR code e o código de autenticação no rodapé
             conteudo.append(Spacer(1, 0.2 * inch))
-            conteudo.extend([qr_image_reportlab, rodape])
+            conteudo.extend([qr_image_reportlab, codigo_autenticacao_paragrafo])
 
             doc.build(conteudo)
 
