@@ -72,7 +72,7 @@
       <th>Nome do Docente</th>
       <th>Curso</th>
       <th>Data de Emissão</th>
-      <!-- Adicione outras colunas da sua declaração, se necessário -->
+      <th>Download PDF</th>
     </tr>
   </thead>
   <tbody>
@@ -81,7 +81,7 @@
       <td>{{ declaracao_emitida.docente.nome }}</td>
       <td>{{ declaracao_emitida.curso.nome }}</td>
       <td>{{ declaracao_emitida.data_emissao }}</td>
-      <!-- Adicione outras colunas da sua declaração, se necessário -->
+      <td><a href="{{ declaracao_emitida.arquivo_pdf.url }}" target="_blank">Baixar PDF</a></td>
     </tr>
     {% empty %}
     <tr>
