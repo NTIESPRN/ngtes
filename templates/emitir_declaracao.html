@@ -81,7 +81,7 @@
       <td>{{ declaracao_emitida.docente.nome }}</td>
       <td>{{ declaracao_emitida.curso.nome }}</td>
       <td>{{ declaracao_emitida.data_emissao }}</td>
-      <td><a href="{{ declaracao_emitida.arquivo_pdf_nome.url }}" onclick="window.open(this.href); return false;">Baixar PDF</a></td>
+      <td><a href="{{ MEDIA_URL }}declaracoes/{{ declaracao_emitida.arquivo_pdf_nome }}" target="_blank">Baixar PDF</a></td>
     </tr>
     {% empty %}
     <tr>
