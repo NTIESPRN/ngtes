@@ -431,9 +431,12 @@ def emitir_declaracao(request):
             # Adicione espaço em branco
             conteudo.append(Spacer(1, 2.5 * inch))
             
+            qr_code_and_rodape = KeepTogether([qr_image_reportlab, rodape])
+
+
             # Adicione o QR code e o código de autenticação no rodapé
             conteudo.append(Spacer(1, 0.2 * inch))
-            conteudo.extend([qr_image_reportlab, rodape])
+            conteudo.append(qr_code_and_rodape)
 
             doc.build(conteudo)
 
