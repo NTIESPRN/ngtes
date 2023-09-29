@@ -331,8 +331,6 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
 from PIL import Image as PilImage
 import base64  # Importe base64
-from reportlab.platypus import KeepTogether
-
 
 def emitir_declaracao(request):
     sucesso = False
@@ -422,23 +420,20 @@ def emitir_declaracao(request):
             rodape_style = ParagraphStyle(
                 'RodapeEstilo',
                 parent=styles['Normal'],
-                alignment=TA_JUSTIFY,
+                alignment=TA_CENTER,
             )
             
             # Crie o parágrafo com o código de autenticação
             rodape = [ 
                 Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", rodape_style),
-                Paragraph(f"Leia o Qr Code acima, ou acesse <strong>https://esprn.saude.rn.gov.br/ngtes/autenticar/ </strong>, e insira o código de autenticação acima para verificar a autenticidade desse documento.", rodape_style),
+                Paragraph(f"Leia o Qr Code acima, ou acesse https://esprn.saude.rn.gov.br/ngtes/autenticar/ , e insira o código de autenticação acima para verificar a autenticidade desse d</strong>", rodape_style),
             ]
             # Adicione espaço em branco
             conteudo.append(Spacer(1, 2.5 * inch))
             
-            qr_code_and_rodape = KeepTogether([qr_image_reportlab, rodape])
-
-
             # Adicione o QR code e o código de autenticação no rodapé
             conteudo.append(Spacer(1, 0.2 * inch))
-            conteudo.append(qr_code_and_rodape)
+            conteudo.extend([qr_image_reportlab, rodape])
 
             doc.build(conteudo)
 
