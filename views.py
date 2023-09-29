@@ -412,7 +412,7 @@ def emitir_declaracao(request):
             )
 
             corpo_declaracao = [
-                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao_emitida.docente.nome}</strong>, inscrito(a) sob o CPF nº <strong>{declaracao_emitida.docente.cpf}</strong>, exerceu atividades como tutor(a) do curso <strong>{declaracao_emitida.curso.nome}</strong>, no componente <strong>{declaracao_emitida.curso.componente}</strong>na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de {declaracao_emitida.curso.carga_horaria} horas.", estilo_corpo),
+                Paragraph(f"Declaramos para os devidos fins que <strong>{declaracao_emitida.docente.nome}</strong>, inscrito(a) sob o CPF nº <strong>{declaracao_emitida.docente.cpf}</strong>, exerceu atividades como tutor(a) do curso <strong>{declaracao_emitida.curso.nome}</strong>, no componente <strong>{declaracao_emitida.curso.componente}</strong> na modalidade semi-presencial, nesta Escola de Saúde Pública do Rio Grande do Norte - ESPRN, instituição integrante da Rede de Escolas Técnicas do SUS - RETSUS e da Rede Nacional de Escolas de Saúde Pública - RedEscola, perfazendo a carga horária total de {declaracao_emitida.curso.carga_horaria} horas.", estilo_corpo),
             ]
 
             conteudo.extend(corpo_declaracao)
