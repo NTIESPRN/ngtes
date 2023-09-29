@@ -63,4 +63,4 @@ class DocumentoForm(forms.ModelForm):
 class DeclaracaoEmitidaForm(forms.ModelForm):
     class Meta:
         model = DeclaracaoEmitida
-        fields = ['docente', 'curso']
+        fields = ['docente', 'curso', 'compoennte']

@@ -269,6 +269,7 @@ class DeclaracaoEmitida(models.Model):
     codigo_autenticacao = models.CharField(max_length=50)
     docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    componente = models.ForeignKey(Curso, on_delete=models.CASCADE)
     data_emissao = models.DateTimeField(auto_now_add=True)
     arquivo_pdf_nome = models.CharField(max_length=255)  # Campo para armazenar o nome do arquivo PDF
 
