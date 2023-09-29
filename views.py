@@ -440,9 +440,9 @@ def emitir_declaracao(request):
 
             # Crie uma tabela para organizar o QR code e o texto do rodapé
             tabela = Table([
-                [qr_image_reportlab, ''],  # Coluna da esquerda para o QR code
-                ['', texto_rodape]  # Coluna da direita para o texto do rodapé
-            ], colWidths=[1.25*inch, 'auto'])
+                [qr_image_reportlab, texto_rodape]  # Uma única coluna com QR code e texto
+            ], colWidths=[1.25*inch, 3*inch])  # Largura fixa para as colunas (ajuste conforme necessário)
+
 
             # Defina o estilo da tabela para alinhar os elementos
             tabela.setStyle(TableStyle([
