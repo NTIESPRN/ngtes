@@ -415,30 +415,30 @@ def emitir_declaracao(request):
             # Inserir o QR code no rodapé
             qr_image_base64_data = f"data:image/png;base64,{qr_image_base64}"
             qr_image_reportlab = Image(qr_image_base64_data, width=1.25*inch, height=1.25*inch)
-            
+                        
             # Defina o estilo do rodapé
             rodape_style = ParagraphStyle(
                 'RodapeEstilo',
                 parent=styles['Normal'],
                 alignment=TA_JUSTIFY,
             )
-            
+
             # Crie o parágrafo com o código de autenticação
             codigo_autenticacao_paragrafo = Paragraph(f"Código de Autenticação: <strong>{declaracao_emitida.codigo_autenticacao}</strong>", rodape_style)
-            
-            # Adicione espaço em branco
-            conteudo.append(Spacer(1, 2.5 * inch))
-            
-            # Adicione o QR code e o código de autenticação no rodapé
-            conteudo.append(Spacer(1, 0.2 * inch))
+
+            # Adicione o QR code no canto esquerdo (remova o espaço em branco antes do QR code)
             conteudo.extend([qr_image_reportlab, codigo_autenticacao_paragrafo])
-        
-         # Adicione o texto no rodapé abaixo do QR code e código de autenticação
-            texto_rodape = Paragraph("Leia o Qr Code acima, ou acesse <strong>https://esprn.saude.rn.gov.br/ngtes/autenticar/ </strong>, e insira o código de autenticação acima para verificar a autenticidade desse documento.", rodape_style)
+
+            # Adicione espaço em branco entre o QR code e o código de autenticação
             conteudo.append(Spacer(1, 0.2 * inch))
+
+            # Adicione o texto no rodapé abaixo do QR code e código de autenticação
+            texto_rodape = Paragraph("Leia o Qr Code acima, ou acesse <strong>https://esprn.saude.rn.gov.br/ngtes/autenticar/ </strong>, e insira o código de autenticação acima para verificar a autenticidade desse documento.", rodape_style)
             conteudo.append(texto_rodape)
 
             doc.build(conteudo)
+
+
 
             buffer.seek(0)
             response = HttpResponse(buffer, content_type='application/pdf')
